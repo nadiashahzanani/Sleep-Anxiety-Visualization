@@ -4,7 +4,7 @@ import pandas as pd
 import plotly.express as px
 
 # --- Page title ---
-st.title("Interactive Visualization — Gender Distribution by Year of Study")
+st.title("1. Basic Sleep Quality Distribution")
 
 # --- Load dataset ---
 url = "https://raw.githubusercontent.com/nadiashahzanani/Sleep-Anxiety-Visualization/refs/heads/main/Time_to_think_Norburyy.csv"
@@ -24,7 +24,7 @@ fig = px.bar(
 fig.update_layout(
     yaxis_title="Number of Students",
     xaxis_title="Year of Study",
-    title_x=0.5,
+    title_x=0.2,
     legend_title="Click to Hide/Show Sex Group",
     plot_bgcolor='rgba(0,0,0,0)',
     hovermode="x unified"
