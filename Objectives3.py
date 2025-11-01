@@ -36,17 +36,41 @@ This pattern supports the idea that evening chronotypes align with delayed daily
 """)
 
 
-
 # --- Scatterplot: Anxiety vs Sleep Quality by Start Time ---
 st.subheader("Scatterplot: Anxiety vs PSQI by Start Time")
-fig, ax = plt.subplots()
-sns.scatterplot(x=psqi_col, y=anx_col, hue=start_col, data=df, ax=ax)
-st.pyplot(fig)
 
-st.markdown("""
-**Interpretation:**  
-Later start preferences are linked to both poorer sleep quality and higher anxiety levels.
-""")
+# Adjust here if the column names are slightly different
+psqi_col = 'psqi_2_groups'
+anx_col = 'Trait_Anxiety'
+start_col = 'Start_time_code'
+
+missing_cols = [col for col in [psqi_col, anx_col, start_col] if col not in df.columns]
+if missing_cols:
+    st.error(f"Missing columns in dataset: {', '.join(missing_cols)}")
+else:
+    fig, ax = plt.subplots(figsize=(7, 5))
+        sns.scatterplot(
+            x=psqi_col,
+            y=anx_col,
+            hue=start_col,
+            data=df,
+            palette='Spectral',
+            ax=ax
+        )
+    
+        ax.set_title("Trait Anxiety vs Sleep Quality by Preferred Start Time")
+        ax.set_xlabel("Sleep Quality (PSQI)")
+        ax.set_ylabel("Trait Anxiety")
+        ax.legend(title="Preferred Start Time Code")
+    
+        st.pyplot(fig)
+    
+        st.markdown("""
+        **Interpretation:**  
+        The scatterplot shows that students preferring later start times generally report both  
+        **poorer sleep quality (higher PSQI)** and **higher trait anxiety**.  
+        The color gradient represents different preferred start time codes, clearly visualizing group trends.
+        """)
 
 # --- Correlation Heatmap ---
 st.subheader("Correlation Heatmap")
