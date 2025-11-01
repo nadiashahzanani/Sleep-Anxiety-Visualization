@@ -42,3 +42,37 @@ st.markdown("""
 3. The hover tooltips show exact student counts per category.  
 4. The overall distribution shows both male and female students in all study years, with slightly higher numbers in early years.
 """)
+
+# --- Interactive Plotly Histogram with Legend ---
+fig = px.histogram(
+    df,
+    x='psqi_2_groups',
+    color='psqi_2_groups',  # adds interactive legend by grouping color
+    nbins=10,
+    color_discrete_sequence=px.colors.qualitative.Set2,
+    title="Distribution of Sleep Quality (PSQI)",
+)
+
+fig.update_layout(
+    xaxis_title="PSQI Score (Higher = Poorer Sleep)",
+    yaxis_title="Number of Students",
+    bargap=0.1,
+    template="simple_white",
+    legend_title_text="PSQI Group",
+)
+
+# --- Enable interactive legend behavior ---
+# (Plotly does this by default — users can click legend items to hide/show)
+fig.update_traces(opacity=0.8)
+
+# --- Display chart in Streamlit ---
+st.plotly_chart(fig, use_container_width=True)
+
+# --- Interpretation ---
+st.markdown("### **Interpretation:**")
+st.markdown("""
+1. Each color in the legend represents a PSQI sleep quality group — you can **click the legend items** to hide or show them interactively.  
+2. Most students fall into two main groups — **good sleepers (PSQI = 1)** and **poor sleepers (PSQI = 2)**.  
+3. The distribution is **bimodal**, meaning there are two peaks at PSQI = 1 and 2, showing that sleep quality tends to cluster into distinct categories.  
+4. This interactive legend helps explore how different PSQI groups contribute to the overall pattern.
+""")
