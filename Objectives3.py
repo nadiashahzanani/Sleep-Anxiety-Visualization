@@ -8,16 +8,19 @@ st.title("Objective 3 — Preferred Start Time & Correlation Matrix")
 url = "https://raw.githubusercontent.com/nadiashahzanani/Sleep-Anxiety-Visualization/refs/heads/main/Time_to_think_Norburyy.csv"
 df = pd.read_csv(url)
 
-# --- Bar Chart: Preferred University Start Time by Sleep Category ---
+# --- Bar Chart: Preferred Start Time by Sleep Category ---
 st.subheader("Preferred University Start Time by Sleep Category")
 
+if 'Start_time_code' in df.columns and 'sleep_category' in df.columns:
     fig, ax = plt.subplots(figsize=(7,4))
     sns.countplot(x='Start_time_code', hue='sleep_category', data=df, palette='muted', ax=ax)
-    ax.set_title("Preferred University Start Time by Sleep Category")
+    ax.set_title("Preferred University Start Time by Sleep Category", fontsize=12)
     ax.set_xlabel("Preferred Start Time Code")
     ax.set_ylabel("Number of Students")
     ax.legend(title="Sleep Category")
     st.pyplot(fig)
+else:
+    st.warning("⚠️ Column 'Start_time_code' or 'sleep_category' not found in dataset.")
 
 
 st.markdown("""
