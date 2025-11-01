@@ -1,14 +1,5 @@
-# ===================================================
-# Sleep, Anxiety & Start Time Visualization Homepage
-# ===================================================
 
 import streamlit as st
-import pandas as pd
-import plotly.express as px
-import plotly.graph_objects as go
-import plotly.io as pio
-from scipy import stats
-import numpy as np
 
 # ------------------------------------------------------------
 # Page Setup
