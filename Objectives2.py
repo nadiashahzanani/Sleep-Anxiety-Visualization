@@ -6,7 +6,7 @@ import seaborn as sns
 from scipy import stats
 import plotly.express as px
 
-st.title("Objective 2 — Group Comparisons and Chronotype")
+st.title("1. Explore the relationship sleep quality, anxiety levels and daytime dozing")
 
 # Load dataset
 url = "https://raw.githubusercontent.com/nadiashahzanani/Sleep-Anxiety-Visualization/refs/heads/main/Time_to_think_Norburyy.csv"
@@ -23,7 +23,7 @@ else:
 
 
 # --- Interactive Box Plot using Plotly ---
-st.subheader("1. Trait Anxiety by Sleep Quality Category (Interactive)")
+st.subheader("Trait Anxiety by Sleep Quality Category")
 
 fig = px.box(
     df,
