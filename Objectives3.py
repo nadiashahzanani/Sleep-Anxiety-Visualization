@@ -36,35 +36,16 @@ This pattern supports the idea that evening chronotypes align with delayed daily
 """)
 
 
-# --- Scatterplot: Anxiety vs Sleep Quality by Start Time ---
-st.subheader("Scatterplot: Anxiety vs PSQI by Start Time")
-missing_cols = [col for col in [psqi_col, anx_col, start_col] if col not in df.columns]
-if missing_cols:
-    st.error(f"Missing columns in dataset: {', '.join(missing_cols)}")
-else:
-    fig, ax = plt.subplots(figsize=(7, 5))
-        sns.scatterplot(
-            x=psqi_col,
-            y=anx_col,
-            hue=start_col,
-            data=df,
-            palette='Spectral',
-            ax=ax
-        )
-    
-        ax.set_title("Trait Anxiety vs Sleep Quality by Preferred Start Time")
-        ax.set_xlabel("Sleep Quality (PSQI)")
-        ax.set_ylabel("Trait Anxiety")
-        ax.legend(title="Preferred Start Time Code")
-    
-        st.pyplot(fig)
-    
-        st.markdown("""
-        **Interpretation:**  
-        The scatterplot shows that students preferring later start times generally report both  
-        **poorer sleep quality (higher PSQI)** and **higher trait anxiety**.  
-        The color gradient represents different preferred start time codes, clearly visualizing group trends.
-        """)
+# --- Scatter Plot: Anxiety vs Sleep Quality (Colored by Start Time) --- 
+if 'Start_time_code' in df.columns: # Assuming 'Start_time_code' is related to preferred start time 
+    plt.figure(figsize=(7,5)) 
+    sns.scatterplot(x='psqi_2_groups', y='Trait_Anxiety', hue='Start_time_code', data=df, palette='Spectral') 
+    plt.title("Trait Anxiety vs Sleep Quality by Preferred Start Time") 
+    plt.xlabel("Sleep Quality (PSQI)") 
+    plt.ylabel("Trait Anxiety") 
+    plt.legend(title="Preferred Start Time Code") 
+    plt.show()
+
 
 # --- Correlation Heatmap ---
 st.subheader("Correlation Heatmap")
