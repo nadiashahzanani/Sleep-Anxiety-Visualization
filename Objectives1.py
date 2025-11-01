@@ -34,11 +34,11 @@ fig.update_layout(
 st.plotly_chart(fig, use_container_width=True)
 
 # --- Interpretation section ---
-st.subheader("📊 Interpretation")
+st.subheader("Interpretation")
 
 st.markdown("""
 1. This chart displays **gender distribution** across different years of study.  
-2. You can **click the legend labels** (e.g., “Sex 1” or “Sex 2”) to hide or show specific gender groups interactively.  
+2. You can **click the legend labels (Sex 1 or Sex 2) to hide or show specific gender groups interactively.  
 3. The hover tooltips show exact student counts per category.  
 4. The overall distribution shows both male and female students in all study years, with slightly higher numbers in early years.
 """)
