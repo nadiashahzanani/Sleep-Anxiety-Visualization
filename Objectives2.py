@@ -21,7 +21,6 @@ else:
     st.error("⚠ Column 'psqi_2_groups' not found in the dataset. Please check CSV structure.")
     st.stop()
 
-st.success("✅ 'sleep_category' column created successfully!")
 
 # --- Interactive Box Plot using Plotly ---
 st.subheader("1. Trait Anxiety by Sleep Quality Category (Interactive)")
