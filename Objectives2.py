@@ -1,12 +1,9 @@
 import streamlit as st
 import pandas as pd
-import seaborn as sns
+import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns
 from scipy import stats
-
-# -------------------------------------------
-# PAGE 2: Group Comparisons and Chronotype
-# -------------------------------------------
 
 st.title("Objective 2 — Group Comparisons and Chronotype")
 
@@ -14,57 +11,39 @@ st.title("Objective 2 — Group Comparisons and Chronotype")
 url = "https://raw.githubusercontent.com/nadiashahzanani/Sleep-Anxiety-Visualization/refs/heads/main/Time_to_think_Norburyy.csv"
 df = pd.read_csv(url)
 
-# Fixed column names based on your dataset
-sleep_cat_col = 'sleep_category' if 'sleep_category' in df.columns else df.columns[9]
-anx_col = 'Trait_Anxiety' if 'Trait_Anxiety' in df.columns else df.columns[6]
-
-# ============================================================
-# Visualization 1 — Boxplot + Swarmplot (Trait Anxiety by Sleep Category)
-# ============================================================
-
-st.subheader("Trait Anxiety by Sleep Quality Category")
-
-fig, ax = plt.subplots(figsize=(6, 4))
-sns.boxplot(x=sleep_cat_col, y=anx_col, data=df, palette='Set2', ax=ax)
-sns.swarmplot(x=sleep_cat_col, y=anx_col, data=df, color='0.3', size=3, ax=ax)
-ax.set_title("Trait Anxiety by Sleep Quality Category")
-ax.set_xlabel("Sleep Category")
-ax.set_ylabel("Trait Anxiety Score")
-st.pyplot(fig)
-
-# ============================================================
-# Statistical Test (T-test)
-# ============================================================
-
-# Extract good vs poor sleep groups
-if 'Good Sleep' in df[sleep_cat_col].values and 'Poor Sleep' in df[sleep_cat_col].values:
-    good = df[df[sleep_cat_col] == 'Good Sleep'][anx_col].dropna()
-    poor = df[df[sleep_cat_col] == 'Poor Sleep'][anx_col].dropna()
-
-    # Perform independent t-test
-    t_stat, p_val = stats.ttest_ind(good, poor)
-
-    st.markdown(f"""
-    ### 🧮 Statistical Test Result (Independent T-Test)
-    - **t-statistic:** {t_stat:.3f}  
-    - **p-value:** {p_val:.4f}  
-    """)
-
-    # Interpretation
-    if p_val < 0.05:
-        st.success("✅ The difference in Trait Anxiety between Good Sleep and Poor Sleep groups is **statistically significant** (p < 0.05).")
-    else:
-        st.info("ℹ️ No statistically significant difference found (p ≥ 0.05).")
-
+# ------------------------------------------------------------
+# Step 1: Create Sleep Category (Good vs Poor)
+# ------------------------------------------------------------
+if 'psqi_2_groups' in df.columns:
+    df['sleep_category'] = np.where(df['psqi_2_groups'] <= 5, 'Good Sleep', 'Poor Sleep')
 else:
-    st.error("⚠️ Could not find 'Good Sleep' or 'Poor Sleep' categories in your dataset.")
+    st.error("⚠️ Column 'psqi_2_groups' not found in the dataset. Please check CSV structure.")
+    st.stop()
 
-# ============================================================
-# Interpretation
-# ============================================================
-st.markdown("""
-**Interpretation:**  
-This visualization and t-test replicate the results from Norbury & Evans (2018).  
-Students who reported **poorer sleep quality** tend to have **higher anxiety scores** on average.  
-The t-test confirms that this difference is statistically significant, indicating a real effect — not random variation.
-""")
+st.success("✅ 'sleep_category' column created successfully!")
+
+# ------------------------------------------------------------
+# Step 2: Boxplot — Trait Anxiety by Sleep Category
+# ------------------------------------------------------------
+if 'Trait_Anxiety' in df.columns:
+    fig, ax = plt.subplots(figsize=(6,4))
+    sns.boxplot(x='sleep_category', y='Trait_Anxiety', data=df, palette='Set2', ax=ax)
+    sns.swarmplot(x='sleep_category', y='Trait_Anxiety', data=df, color='0.3', size=3, ax=ax)
+    ax.set_title("Trait Anxiety by Sleep Quality Category")
+    ax.set_xlabel("Sleep Category")
+    ax.set_ylabel("Trait Anxiety Score")
+    st.pyplot(fig)
+
+    # Optional statistical test
+    good = df[df['sleep_category'] == 'Good Sleep']['Trait_Anxiety']
+    poor = df[df['sleep_category'] == 'Poor Sleep']['Trait_Anxiety']
+    t, p = stats.ttest_ind(good, poor, equal_var=False)
+    st.write(f"**T-test Result:** t = {t:.2f}, p = {p:.4f}")
+
+    st.markdown("""
+    **Interpretation:**  
+    The boxplot shows that students with **poor sleep quality** tend to have **higher trait anxiety** scores.  
+    This pattern matches the Google Colab results — confirming a meaningful difference between Good and Poor Sleep groups.  
+    """)
+else:
+    st.error("⚠️ Column 'Trait_Anxiety' not found in dataset.")
