@@ -50,10 +50,10 @@ st.write(df.head())
 # ------------------------------------------------------------
 fig1 = px.histogram(
     df, 
-    x="PSQI_Score", 
+    x="psqi_2_groups", 
     nbins=15, 
     color_discrete_sequence=[colors[0]],
-    title="1️⃣ Distribution of Sleep Quality (PSQI Score)"
+    title="1️⃣ Distribution of Sleep Quality (psqi_2_groups)"
 )
 fig1.update_layout(xaxis_title="PSQI (Higher = Poorer Sleep)", yaxis_title="Count")
 st.plotly_chart(fig1, use_container_width=True)
@@ -90,10 +90,10 @@ st.write(
 # ------------------------------------------------------------
 # 3️⃣ Correlation Between Sleep Quality and Anxiety (Scatter)
 # ------------------------------------------------------------
-r, p = stats.pearsonr(df["PSQI_Score"].dropna(), df["Trait_Anxiety"].dropna())
+r, p = stats.pearsonr(df["psqi_2_groups"].dropna(), df["Trait_Anxiety"].dropna())
 fig3 = px.scatter(
     df,
-    x="PSQI_Score",
+    x="psqi_2_groups",
     y="Trait_Anxiety",
     color_discrete_sequence=[colors[2]],
     trendline="ols",
