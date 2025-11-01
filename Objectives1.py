@@ -104,9 +104,6 @@ fig.update_layout(
     legend_title_text="Click to Filter by Gender",  # encourage legend interaction
 )
 
-# --- Add helpful instructions ---
-st.markdown("💡 **Tip:** Click on the legend items (e.g., *Male*, *Female*) to hide or show them interactively!")
-
 # --- Display interactive chart in Streamlit ---
 st.plotly_chart(fig, use_container_width=True)
 
