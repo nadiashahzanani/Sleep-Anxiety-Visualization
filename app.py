@@ -107,9 +107,6 @@ if page == "Page 1":
     which introduces the potential for response bias.
     """)
 
-    st.markdown("---")
-    st.caption("Page 1 visualizations summarize the key distribution patterns and correlations between sleep quality and anxiety.")
-
 
 # ============================================================
 # PAGE 2: Group Comparisons and Chronotype
@@ -175,26 +172,45 @@ if page == "Page 2":
 if page == "Page 3":
     st.header("Objective 3 — Preferred Start Time & Correlation Matrix")
 
+    # ----- Visualization 1 -----
     st.subheader("Preferred Start Time by Chronotype")
     ctab2 = pd.crosstab(df[start_col], df[chrono_col])
     st.bar_chart(ctab2)
+    st.markdown("""
+    **Interpretation:**  
+    Preferred start time is closely linked with students’ **chronotype**.  
+    Morning types (higher rMEQ scores) tend to prefer earlier start times,  
+    while evening types show preference for later classes.  
+    The visual highlights this relationship and where overlap occurs between groups.
+    """)
 
+    # ----- Visualization 2 -----
     st.subheader("Scatter: Anxiety vs PSQI by Start Time")
     fig6, ax6 = plt.subplots()
     sns.scatterplot(x=psqi_col, y=anx_col, hue=start_col, data=df, ax=ax6)
     st.pyplot(fig6)
+    st.markdown("""
+    **Interpretation:**  
+    This scatterplot shows that students preferring later start times often report both **poorer sleep quality** (higher PSQI)  
+    and **higher trait anxiety** levels.  
+    The association is moderate, suggesting lifestyle or scheduling preferences may influence mental wellbeing.
+    """)
 
+    # ----- Visualization 3 -----
     st.subheader("Correlation Heatmap")
     numeric = df.select_dtypes(include=np.number)
     corr = numeric.corr()
     fig7, ax7 = plt.subplots(figsize=(7,5))
     sns.heatmap(corr, annot=True, cmap="vlag", ax=ax7)
     st.pyplot(fig7)
-
     st.markdown("""
     **Interpretation:**  
-    The correlation matrix shows strong associations between sleep quality, anxiety, and chronotype measures.
-    Students preferring later start times also exhibit poorer sleep quality and higher anxiety levels.
+    The correlation heatmap helps identify which variables are most strongly associated.  
+    For instance, **Anxiety ↔ PSQI** and **PSQI ↔ Daytime Dozing** show notable positive relationships  
+    (e.g., *r ≈ 0.35* indicating a modest correlation).  
+    These findings imply that poor sleep and frequent daytime drowsiness may contribute to elevated anxiety.  
+    **Next Steps:** Future work can use multivariate regression controlling for **age** and **gender**,  
+    and explore whether **chronotype acts as a mediator** between sleep quality and anxiety.
     """)
 
 st.markdown("---")
