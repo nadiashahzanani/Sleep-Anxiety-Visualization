@@ -1,48 +1,28 @@
-import streamlit as st
-import matplotlib.pyplot as plt
 import pandas as pd
-import numpy as np # Needed for bar position calculation
+import plotly.express as px
 
-# --- Assuming 'df' is your pandas DataFrame loaded earlier in the script ---
+# Load your data (make sure the file path is correct)
+# Example: CSV file
+df = pd.read_csv("/content/Time_to_think_Norburyy.csv")  
 
-# 1. Prepare Data for Matplotlib (Group and Count)
-# This mimics the aggregation performed implicitly by px.bar
+# Now you can group or plot it safely
 plot_df = df.groupby(['Year_of_Study', 'Sex']).size().unstack(fill_value=0)
 
-# 2. Create Matplotlib Figure
-# Create a figure and an axis object
-fig, ax = plt.subplots(figsize=(10, 6))
+# Create a grouped bar chart
+fig = px.bar(
+    df,
+    x='Year_of_Study',
+    color='Sex',
+    barmode='group',
+    title='Gender Distribution by Year of Study',
+    labels={'Year_of_Study': 'Year of Study', 'Sex': 'Sex'}
+)
 
-# Define bar width and positions
-bar_width = 0.35
-# Get the positions of the 'Year_of_Study' categories on the x-axis
-x = np.arange(len(plot_df.index)) 
+fig.update_layout(yaxis_title="Number of Students")
+fig.show()
 
-# Plot the bars for each 'Sex' category
-# 'Sex' 1 bars will be slightly to the left, 'Sex' 2 bars slightly to the right
-rects1 = ax.bar(x - bar_width/2, plot_df.iloc[:, 0], bar_width, label=plot_df.columns[0])
-rects2 = ax.bar(x + bar_width/2, plot_df.iloc[:, 1], bar_width, label=plot_df.columns[1])
-
-# Add labels, title, and custom x-axis tick labels
-ax.set_title('Gender Distribution by Year of Study')
-ax.set_xlabel('Year of Study')
-ax.set_ylabel('Number of Students')
-
-# Set x-axis ticks to be the actual 'Year_of_Study' values
-ax.set_xticks(x)
-ax.set_xticklabels(plot_df.index)
-
-# Add a legend
-ax.legend(title='Sex')
-
-# Ensure layout is tight to prevent labels from being cut off
-plt.tight_layout()
-
-# 3. Display the Matplotlib figure in Streamlit
-st.pyplot(fig)
-
-# --- Interpretation (for display in Streamlit) ---
-st.subheader("Interpretation:")
-st.write("1. The chart shows that the number of students remains quite balanced across the different years of study.")
-st.write("2. The color scale (Sex 1 and 2) indicates there are both male and female students in all years.")
-st.write("3. However, the distribution looks slightly denser in the early years, suggesting more students in Year 1 or 2 compared to later years.")
+# --- Interpretation ---
+print("Interpretation:")
+print("1. The chart shows that the number of students remains quite balanced across the different years of study.")
+print("2. The color scale (Sex 1 and 2) indicates there are both male and female students in all years.")
+print("3. However, the distribution looks slightly denser in the early years, suggesting more students in Year 1 or 2 compared to later years.")
