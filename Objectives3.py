@@ -54,8 +54,6 @@ if 'Start_time_code' in df.columns and 'sleep_category' in df.columns:
     3. Fewer students prefer very early (code 3–4) or very late (code 8–9) start times.  
     4. This suggests that **good sleepers tend to favor moderate start times**, not too early or too late.
     """)
-else:
-    st.warning("⚠️ Column related to preferred start time or sleep category not found in the dataset.")
 
 
 
