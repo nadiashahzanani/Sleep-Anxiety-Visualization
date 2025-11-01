@@ -107,6 +107,26 @@ if page == "Page 1":
     which introduces the potential for response bias.
     """)
 
+    # --- Summary Box ---
+    st.markdown("""
+    <div style="
+        background-color:#f0f4ff;
+        padding:15px;
+        border-radius:10px;
+        border-left:6px solid #4a90e2;
+        margin-top:20px;">
+    <h4>📘 Summary Box</h4>
+    <p>
+    • Most students reported <b>fairly bad to very bad sleep quality</b>.<br>
+    • Trait anxiety scores show wide variation, but tend to rise with poorer sleep.<br>
+    • A <b>positive correlation (r ≈ {:.2f})</b> exists between anxiety and PSQI, 
+      confirming that worse sleep quality is linked to higher anxiety.<br>
+    • These findings replicate Norbury & Evans (2018) and suggest potential 
+      intervention areas for university wellbeing programs.
+    </p>
+    </div>
+    """.format(r), unsafe_allow_html=True)
+
 
 # ============================================================
 # PAGE 2: Group Comparisons and Chronotype
