@@ -8,22 +8,32 @@ st.title("Objective 3 — Preferred Start Time & Correlation Matrix")
 url = "https://raw.githubusercontent.com/nadiashahzanani/Sleep-Anxiety-Visualization/refs/heads/main/Time_to_think_Norburyy.csv"
 df = pd.read_csv(url)
 
-# Fixed columns
-psqi_col = df.columns[8]
-anx_col = df.columns[6]
-chrono_col = df.columns[5]
-start_col = df.columns[10]
+# --- Bar Chart: Preferred University Start Time by Sleep Category ---
+st.subheader("Preferred University Start Time by Sleep Category")
 
-# --- Preferred Start Time by Chronotype ---
-st.subheader("Preferred Start Time by Chronotype")
-ctab = pd.crosstab(df[start_col], df[chrono_col])
-st.bar_chart(ctab)
+if 'Start_time_code' in df.columns and 'sleep_category' in df.columns:
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+
+    fig, ax = plt.subplots(figsize=(7,4))
+    sns.countplot(x='Start_time_code', hue='sleep_category', data=df, palette='muted', ax=ax)
+    ax.set_title("Preferred University Start Time by Sleep Category")
+    ax.set_xlabel("Preferred Start Time Code")
+    ax.set_ylabel("Number of Students")
+    ax.legend(title="Sleep Category")
+    st.pyplot(fig)
+else:
+    st.warning("⚠️ Column 'Start_time_code' or 'sleep_category' not found in dataset.")
+
 
 st.markdown("""
 **Interpretation:**  
-Students with morning chronotypes prefer earlier start times,  
-while evening chronotypes prefer later classes.
+Students with **poorer sleep quality** tend to prefer **later university start times**,  
+while good sleepers are more likely to choose earlier classes.  
+This pattern aligns with known chronotype behavior — *evening-type individuals* often experience 
+delayed sleep cycles and prefer later activity schedules.
 """)
+
 
 # --- Scatterplot: Anxiety vs Sleep Quality by Start Time ---
 st.subheader("Scatterplot: Anxiety vs PSQI by Start Time")
