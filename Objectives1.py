@@ -1,29 +1,44 @@
 import streamlit as st
 import pandas as pd
-import plotly.express as px
+import matplotlib.pyplot as plt
+import seaborn as sns
 from scipy import stats
 
-# Load data
+st.title("Objective 1 — Distribution and Correlation")
+
+# Load dataset
 url = "https://raw.githubusercontent.com/nadiashahzanani/Sleep-Anxiety-Visualization/refs/heads/main/Time_to_think_Norburyy.csv"
 df = pd.read_csv(url)
 
-st.header("Objective 1 — Distribution and Correlation")
-st.markdown("This page explores how students’ **sleep quality** relates to **trait anxiety**.")
+# Select fixed columns (based on your dataset order)
+psqi_col = df.columns[8]   # Sleep Quality (PSQI)
+anx_col = df.columns[6]    # Trait Anxiety
 
-# 1️⃣ Sleep Quality Distribution
-fig1 = px.histogram(df, x="psqi_2_groups", color_discrete_sequence=["#4a90e2"], title="Distribution of Sleep Quality")
-st.plotly_chart(fig1, use_container_width=True)
-st.write("**Interpretation:** Most students report moderate to poor sleep quality, consistent with university samples.")
+# --- Histogram 1: Sleep Quality ---
+col1, col2 = st.columns(2)
+with col1:
+    fig, ax = plt.subplots()
+    sns.histplot(df[psqi_col], kde=True, color="skyblue", ax=ax)
+    ax.set_title("Distribution of Sleep Quality (PSQI)")
+    st.pyplot(fig)
 
-# 2️⃣ Trait Anxiety Distribution
-fig2 = px.histogram(df, x="Trait_Anxiety", color_discrete_sequence=["#f45b69"], title="Distribution of Trait Anxiety Scores")
-st.plotly_chart(fig2, use_container_width=True)
-st.write("**Interpretation:** Anxiety levels vary widely, reflecting diverse psychological wellbeing across students.")
+with col2:
+    fig2, ax2 = plt.subplots()
+    sns.histplot(df[anx_col], kde=True, color="salmon", ax=ax2)
+    ax2.set_title("Distribution of Trait Anxiety")
+    st.pyplot(fig2)
 
-# 3️⃣ Correlation (Sleep vs Anxiety)
-r, p = stats.pearsonr(df["psqi_2_groups"].dropna(), df["Trait_Anxiety"].dropna())
-fig3 = px.scatter(df, x="psqi_2_groups", y="Trait_Anxiety", trendline="ols",
-                  color_discrete_sequence=["#90c978"],
-                  title=f"Relationship Between Sleep Quality and Anxiety (r = {r:.2f}, p = {p:.3g})")
-st.plotly_chart(fig3, use_container_width=True)
-st.write("**Interpretation:** Poorer sleep quality (higher PSQI) is associated with higher anxiety levels (moderate positive correlation).")
+# --- Scatterplot: PSQI vs Anxiety ---
+fig3, ax3 = plt.subplots()
+sns.regplot(x=df[psqi_col], y=df[anx_col], scatter_kws={'alpha':0.6}, color="purple", ax=ax3)
+r, p = stats.pearsonr(df[psqi_col].dropna(), df[anx_col].dropna())
+ax3.text(0.02, 0.95, f"r = {r:.2f}, p = {p:.3g}", transform=ax3.transAxes)
+ax3.set_xlabel("PSQI (Higher = Worse Sleep)")
+ax3.set_ylabel("Trait Anxiety Score")
+st.pyplot(fig3)
+
+st.markdown(f"""
+**Interpretation:**  
+A moderate positive correlation (**r = {r:.2f}**) shows that poorer sleep quality tends to associate with higher anxiety.  
+This supports Norbury & Evans (2018)’s findings that subjective sleep quality predicts anxiety among students.
+""")
