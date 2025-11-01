@@ -47,3 +47,24 @@ if 'Trait_Anxiety' in df.columns:
     """)
 else:
     st.error("⚠️ Column 'Trait_Anxiety' not found in dataset.")
+
+# ------------------------------------------------------------
+# Step 3: Daytime Dozing Frequency by Sleep Quality Category
+# ------------------------------------------------------------
+plt.figure(figsize=(7, 5))
+if 'Daytime_Dozing' in df.columns and 'sleep_category' in df.columns:
+    doze_counts = pd.crosstab(df['sleep_category'], df['Daytime_Dozing'], normalize='index') * 100
+    ax = doze_counts.plot(kind='bar', stacked=True, colormap='coolwarm', figsize=(7, 5))
+    ax.set_title("Daytime Dozing Frequency by Sleep Quality Category")
+    ax.set_xlabel("Sleep Category")
+    ax.set_ylabel("Percentage (%)")
+    ax.legend(title="Dozing Frequency", bbox_to_anchor=(1.05, 1), loc='upper left')
+    st.pyplot(plt.gcf())
+    st.markdown("""
+    **Interpretation:**  
+    The bar chart shows that *poor sleepers* experience **higher daytime dozing percentages** compared to good sleepers.  
+    This pattern is consistent with the original Norbury & Evans (2018) results,  
+    suggesting that insufficient nighttime sleep increases daytime drowsiness.
+    """)
+else:
+    st.warning("⚠️ Column 'Daytime_Dozing' or 'sleep_category' not found in dataset.")
