@@ -34,13 +34,16 @@ st.write(
 )
 
 # Load dataset from GitHub
-url = "https://raw.githubusercontent.com/nadiashahzanani/Sleep-Anxiety-Visualization/refs/heads/main/Time_to_think_Norbury.csv"
-
+url = "https://raw.githubusercontent.com/nadiashahzanani/Sleep-Anxiety-Visualization/refs/heads/main/Time_to_think_Norburyy.csv"
 df = pd.read_csv(url)
 
 # Plotly theme setup
 pio.templates.default = "plotly_white"
 colors = ["#4a90e2", "#f45b69", "#90c978", "#ffb74d"]
+
+st.write("✅ File loaded successfully!")
+st.write(df.shape)
+st.write(df.head())
 
 # ------------------------------------------------------------
 # 1️⃣ Sleep Quality Distribution (Histogram)
