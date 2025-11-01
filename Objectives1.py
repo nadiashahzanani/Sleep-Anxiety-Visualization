@@ -5,28 +5,55 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 # --- Page Title ---
-st.title("Improved Visualization — Objective 1 Analysis")
+st.title("Interactive Visualization — Objective 1 Analysis")
 
 # --- Load dataset ---
 url = "https://raw.githubusercontent.com/nadiashahzanani/Sleep-Anxiety-Visualization/refs/heads/main/Time_to_think_Norburyy.csv"
 df = pd.read_csv(url)
 
+# --- Sidebar Filters ---
+st.sidebar.header("Filter Options")
+
+# Dropdown to select Year of Study
+year_filter = st.sidebar.multiselect(
+    "Select Year(s) of Study:",
+    options=sorted(df['Year_of_Study'].dropna().unique()),
+    default=sorted(df['Year_of_Study'].dropna().unique())
+)
+
+# Dropdown to select Gender (Sex)
+sex_filter = st.sidebar.multiselect(
+    "Select Gender:",
+    options=sorted(df['Sex'].dropna().unique()),
+    default=sorted(df['Sex'].dropna().unique())
+)
+
+# Filter the DataFrame based on selections
+filtered_df = df[df['Year_of_Study'].isin(year_filter) & df['Sex'].isin(sex_filter)]
+
 # --- Visualization 1: Gender Distribution by Year of Study ---
 st.subheader("1. Gender Distribution by Year of Study")
 
 fig1, ax1 = plt.subplots(figsize=(7, 4))
-sns.countplot(data=df, x='Year_of_Study', hue='Sex', palette='Set2', ax=ax1)
+sns.countplot(data=filtered_df, x='Year_of_Study', hue='Sex', palette='Set2', ax=ax1)
 ax1.set_title("Gender Distribution by Year of Study", fontsize=12)
 ax1.set_xlabel("Year of Study")
 ax1.set_ylabel("Number of Students")
 ax1.legend(title='Sex', loc='upper right')
 st.pyplot(fig1)
 
-st.markdown("""
+# --- Dynamic Text Summary ---
+st.markdown(f"""
+**Interactive Interpretation:**
+
+- You are currently viewing **{len(filtered_df)} students** filtered by:
+  - Year(s) of Study: `{', '.join(map(str, year_filter))}`
+  - Gender(s): `{', '.join(map(str, sex_filter))}`
+
 **Interpretation:**
-1. The chart shows that the number of students remains quite balanced across different years of study.  
-2. Both male and female students are represented in all years.  
-3. The distribution looks slightly denser in early years (Year 1–2), suggesting more students in the beginning of their program.
+1. The chart shows how student counts vary by year and gender based on your filter.
+2. You can adjust the filters in the sidebar to focus on specific groups (e.g., only Year 1, or only male students).
+3. This helps explore whether certain study years have more balanced or skewed gender distributions.
 """)
 
 
