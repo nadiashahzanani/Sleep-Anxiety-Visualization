@@ -30,9 +30,10 @@ st.pyplot(fig)
 
 st.markdown("""
 **Interpretation:**  
-This chart shows how students’ preferred class start times relate to their sleep category.  
-Students with **poorer sleep quality** often prefer **later start times**, while good sleepers prefer earlier classes.  
-This pattern supports the idea that evening chronotypes align with delayed daily schedules.
+1. The chart shows when students with good sleep prefer classes to start.
+2. Most good sleepers prefer classes starting around code 5 or 6, which likely represents mid-morning times such as 9 to 10 AM.
+3. Fewer students prefer very early (code 3 to 4) or very late (code 8 to 9) start times.
+4. This suggests that good sleepers tend to prefer moderate start times, not too early or too late.
 """)
 
 
