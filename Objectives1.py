@@ -4,7 +4,7 @@ import pandas as pd
 import plotly.express as px
 
 # --- Page title ---
-st.title("1. Basic Sleep Quality Distribution")
+st.subheader("1. Basic Sleep Quality Distribution")
 
 # --- Load dataset ---
 url = "https://raw.githubusercontent.com/nadiashahzanani/Sleep-Anxiety-Visualization/refs/heads/main/Time_to_think_Norburyy.csv"
@@ -24,7 +24,7 @@ fig = px.bar(
 fig.update_layout(
     yaxis_title="Number of Students",
     xaxis_title="Year of Study",
-    title_x=0.2,
+    title_x=0.3,
     legend_title="Click to Hide/Show Sex Group",
     plot_bgcolor='rgba(0,0,0,0)',
     hovermode="x unified"
@@ -34,16 +34,17 @@ fig.update_layout(
 st.plotly_chart(fig, use_container_width=True)
 
 # --- Interpretation section ---
-st.subheader("Interpretation")
+st.subheader("Interpretation:")
 
 st.markdown("""
-1. This chart displays **gender distribution** across different years of study.  
-2. You can **click the legend labels (Sex 1 or Sex 2) to hide or show specific gender groups interactively.  
-3. The hover tooltips show exact student counts per category.  
-4. The overall distribution shows both male and female students in all study years, with slightly higher numbers in early years.
+1. This chart shows the gender distribution across different years of study.
+2. It reveals that both male and female students are present in every year, with slightly more students in the earlier years.
 """)
 
+
 # --- Interactive Plotly Histogram with Legend ---
+st.subheader("2. Basic Sleep Quality Distribution")
+
 fig = px.histogram(
     df,
     x='psqi_2_groups',
@@ -71,14 +72,12 @@ st.plotly_chart(fig, use_container_width=True)
 # --- Interpretation ---
 st.markdown("### **Interpretation:**")
 st.markdown("""
-1. Each color in the legend represents a PSQI sleep quality group — you can **click the legend items** to hide or show them interactively.  
-2. Most students fall into two main groups — **good sleepers (PSQI = 1)** and **poor sleepers (PSQI = 2)**.  
-3. The distribution is **bimodal**, meaning there are two peaks at PSQI = 1 and 2, showing that sleep quality tends to cluster into distinct categories.  
-4. This interactive legend helps explore how different PSQI groups contribute to the overall pattern.
+1. Most students are grouped into two main sleep quality categories which is good sleepers (PSQI = 1) and poor sleepers (PSQI = 2).
+2. The interactive legend allows users to easily explore how each group contributes to the overall sleep pattern.
 """)
 
 # --- Interactive Box Plot with Legend Control ---
-st.subheader("1. Sleep Quality (PSQI) by Year of Study (Interactive Legend)")
+st.subheader("3. Sleep Quality (PSQI) by Year of Study (Interactive Legend)")
 
 fig = px.box(
     df,
@@ -114,8 +113,6 @@ st.plotly_chart(fig, use_container_width=True)
 # --- Interpretation ---
 st.markdown("### **Interpretation:**")
 st.markdown("""
-1. The chart is fully interactive — click the legend to isolate or compare genders.  
-2. Students from Year 1 and Year 2 generally show a mix of good and poor sleepers (PSQI ≈ 1–2).  
-3. Year 3 students mostly show better sleep (lower PSQI scores).  
-4. The spread of data suggests sleep quality differences are small but noticeable across years.
+1. This chart shows that students in Year 1 and 2 have a mix of good and poor sleepers, while most Year 3 students tend to sleep better. 
+2. Overall, sleep quality differences across years are small but still noticeable.
 """)
