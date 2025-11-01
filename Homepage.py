@@ -42,6 +42,7 @@ pio.templates.default = "plotly_white"
 colors = ["#4a90e2", "#f45b69", "#90c978", "#ffb74d"]
 
 st.write("✅ File loaded successfully!")
+st.write("Columns in dataset:", df.columns.tolist())
 st.write(df.shape)
 st.write(df.head())
 
