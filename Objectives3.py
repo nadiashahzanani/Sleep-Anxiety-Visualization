@@ -1,3 +1,13 @@
+import streamlit as st
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+st.title("Objective 3 — Preferred Start Time & Correlation Matrix")
+
+url = "https://raw.githubusercontent.com/nadiashahzanani/Sleep-Anxiety-Visualization/refs/heads/main/Time_to_think_Norburyy.csv"
+df = pd.read_csv(url)
+
 # --- Bar Chart: Preferred University Start Time by Sleep Category ---
 st.subheader("Preferred University Start Time by Sleep Category")
 
