@@ -23,7 +23,7 @@ st.markdown("---")
 # ------------------------------------------------------------
 # Load Dataset (from GitHub)
 # ------------------------------------------------------------
-url = "https://raw.githubusercontent.com/nadiashahzanani/Sleep-Anxiety-Visualization/main/Time_to_think_Norburyy.csv"
+url = "https://raw.githubusercontent.com/nadiashahzanani/Sleep-Anxiety-Visualization/refs/heads/main/Time_to_think_Norburyy.csv"
 
 @st.cache_data
 def load_data(path):
