@@ -1,20 +1,14 @@
+# --- Import required libraries ---
 import streamlit as st
 import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
+import plotly.express as px
 
-st.title("Objective 3 — Preferred Start Time by Sleep Category")
+# --- Page Title ---
+st.title("Interactive Visualization — Preferred Class Start Time by Sleep Category")
 
-# Load dataset
+# --- Load dataset ---
 url = "https://raw.githubusercontent.com/nadiashahzanani/Sleep-Anxiety-Visualization/refs/heads/main/Time_to_think_Norburyy.csv"
 df = pd.read_csv(url)
-
-# Fixed column names (adjust as per your dataset)
-psqi_col = "PSQI_Score" if "PSQI_Score" in df.columns else df.columns[8]
-anx_col = "Trait_Anxiety" if "Trait_Anxiety" in df.columns else df.columns[6]
-chrono_col = "MEQ" if "MEQ" in df.columns else df.columns[5]
-sleep_cat_col = "sleep_category" if "sleep_category" in df.columns else df.columns[9]
-start_col = "Start_time_code" if "Start_time_code" in df.columns else df.columns[10]
 
 # --- Check if column exists ---
 if 'Start_time_code' in df.columns and 'sleep_category' in df.columns:
@@ -62,6 +56,7 @@ if 'Start_time_code' in df.columns and 'sleep_category' in df.columns:
     """)
 else:
     st.warning("⚠️ Column related to preferred start time or sleep category not found in the dataset.")
+
 
 
 # --- Scatter Plot: Anxiety vs Sleep Quality (Colored by Start Time) ---
