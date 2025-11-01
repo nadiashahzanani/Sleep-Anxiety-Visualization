@@ -63,29 +63,70 @@ st.markdown("""
 4. The wider box height indicates **greater variability** in anxiety among those with good sleep.
 """)
 
-# --- Interaction Tip ---
-st.markdown("💡 **Tip:** Hover over individual points to see exact anxiety scores. You can also zoom, pan, or export the graph.")
+# --- Statistical Test (t-test) ---
+good = df[df['sleep_category']=='Good Sleep']['Trait_Anxiety']
+poor = df[df['sleep_category']=='Poor Sleep']['Trait_Anxiety']
+t, p = stats.ttest_ind(good, poor)
+print(f"T-test result: t = {t:.3f}, p = {p:.4f}")
 
 # ------------------------------------------------------------
 # Step 3: Daytime Dozing Frequency by Sleep Quality Category
 # ------------------------------------------------------------
-plt.figure(figsize=(7, 5))
+# --- Check if 'Daytime_Dozing' column exists ---
 if 'Daytime_Dozing' in df.columns and 'sleep_category' in df.columns:
-    doze_counts = pd.crosstab(df['sleep_category'], df['Daytime_Dozing'], normalize='index') * 100
-    ax = doze_counts.plot(kind='bar', stacked=True, colormap='coolwarm', figsize=(7, 5))
-    ax.set_title("Daytime Dozing Frequency by Sleep Quality Category")
-    ax.set_xlabel("Sleep Category")
-    ax.set_ylabel("Percentage (%)")
-    ax.legend(title="Dozing Frequency", bbox_to_anchor=(1.05, 1), loc='upper left')
-    st.pyplot(plt.gcf())
+
+    # --- Calculate normalized counts (percentage) ---
+    doze_counts = (
+        df.groupby('sleep_category')['Daytime_Dozing']
+        .value_counts(normalize=True)
+        .mul(100)
+        .reset_index(name='Percentage')
+    )
+
+    # --- Create interactive stacked bar chart ---
+    fig = px.bar(
+        doze_counts,
+        x='sleep_category',
+        y='Percentage',
+        color='Daytime_Dozing',
+        title='Daytime Dozing Frequency by Sleep Quality Category',
+        labels={
+            'sleep_category': 'Sleep Category',
+            'Daytime_Dozing': 'Dozing Frequency',
+            'Percentage': 'Percentage (%)'
+        },
+        category_orders={
+            "Daytime_Dozing": sorted(df['Daytime_Dozing'].dropna().unique())
+        },
+        text='Percentage'
+    )
+
+    # --- Enhance layout ---
+    fig.update_traces(texttemplate='%{text:.1f}%', textposition='inside')
+    fig.update_layout(
+        barmode='stack',
+        yaxis_title="Percentage (%)",
+        xaxis_title="Sleep Category",
+        plot_bgcolor="rgba(0,0,0,0)",
+        paper_bgcolor="rgba(0,0,0,0)",
+        legend_title_text="Daytime Dozing Frequency",
+        title_font=dict(size=18)
+    )
+
+    # --- Display interactive chart in Streamlit ---
+    st.plotly_chart(fig, use_container_width=True)
+
+    # --- Interpretation Section ---
+    st.markdown("### **Interpretation:**")
     st.markdown("""
-    *Interpretation:*  
-    The bar chart shows that poor sleepers experience *higher daytime dozing percentages* compared to good sleepers.  
-    This pattern is consistent with the original Norbury & Evans (2018) results,  
-    suggesting that insufficient nighttime sleep increases daytime drowsiness.
+    1. The stacked bar chart shows the **percentage of students in each sleep quality category** (e.g., Good vs Poor sleepers) based on their **daytime dozing frequency**.  
+    2. The color segments represent how often students doze during the day — lighter colors indicate less frequent dozing, while darker colors show more frequent dozing.  
+    3. Students with **good sleep quality** generally show less variation in daytime dozing, suggesting they are more alert.  
+    4. Poor sleepers, if present, may show higher daytime dozing percentages, reflecting lower alertness levels.
     """)
+
 else:
-    st.warning("⚠ Column 'Daytime_Dozing' or 'sleep_category' not found in dataset.")
+    st.error("⚠️ Required column 'Daytime_Dozing' or 'sleep_category' not found in dataset.")
 
 # -----------------------------------------------------------
 # Step 4: Chronotype (rMEQ Score) by Sleep Quality Category
