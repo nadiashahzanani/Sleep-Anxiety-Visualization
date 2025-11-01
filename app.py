@@ -21,7 +21,7 @@ st.markdown("Data source: Norbury & Evans (Mendeley Data) — DOI: 10.17632/mxsj
 try:
     df = load_data()
 except Exception as e:
-    st.error("Could not find 'norbury_sleep_data.csv' in this folder. Please download from Mendeley Data and rename it: norbury_sleep_data.csv")
+    st.error("Could not find 'Time_to_think_Norburyy.csv'. Please make sure this file is in the same folder as app.py.")
     st.stop()
 
 # Quick cleaning: adapt column names to actual dataset
