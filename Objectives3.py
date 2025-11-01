@@ -17,13 +17,13 @@ sleep_cat_col = "sleep_category" if "sleep_category" in df.columns else df.colum
 start_col = "Start_time_code" if "Start_time_code" in df.columns else df.columns[10]
 
 # --- Bar Chart: Preferred Start Time by Sleep Category ---
-st.subheader("Preferred University Start Time by Sleep Category")
+st.subheader("1. University Start Time by Sleep Class")
 
 # ✅ Match Google Colab’s output (remove warning)
 fig, ax = plt.subplots(figsize=(7,4))
 sns.countplot(x=start_col, hue=sleep_cat_col, data=df, palette='muted', ax=ax)
-ax.set_title("Preferred University Start Time by Sleep Category")
-ax.set_xlabel("Preferred Start Time Code")
+ax.set_title("Preferred Uni Start Time by Sleep Category")
+ax.set_xlabel("Start Time Code")
 ax.set_ylabel("Number of Students")
 ax.legend(title="Sleep Category")
 st.pyplot(fig)
@@ -39,7 +39,7 @@ st.markdown("""
 
 # --- Scatter Plot: Anxiety vs Sleep Quality (Colored by Start Time) ---
 if 'Start_time_code' in df.columns:
-    st.subheader("Trait Anxiety vs Sleep Quality by Preferred Start Time")
+    st.subheader("2. Trait Anxiety vs Sleep Quality by Preferred Start Time")
     
     # Create the figure
     fig, ax = plt.subplots(figsize=(7,5))
@@ -66,7 +66,7 @@ if 'Start_time_code' in df.columns:
     
 
 # --- Correlation Heatmap ---
-st.subheader("Correlation Heatmap")
+st.subheader("3. Correlation Heatmap")
 # Use the exact 3 columns from your Colab
 selected_cols = ['psqi_2_groups', 'Trait_Anxiety', 'MEQ']
 
