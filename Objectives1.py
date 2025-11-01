@@ -1,45 +1,44 @@
+# --- Import libraries ---
 import streamlit as st
 import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
-from scipy import stats
+import plotly.express as px
 
-st.title("Objective 1 — Distribution and Correlation")
+# --- Page title ---
+st.title("Interactive Visualization — Gender Distribution by Year of Study")
 
+# --- Load dataset ---
 url = "https://raw.githubusercontent.com/nadiashahzanani/Sleep-Anxiety-Visualization/refs/heads/main/Time_to_think_Norburyy.csv"
 df = pd.read_csv(url)
 
-# --- Histogram: Sleep Quality (PSQI) and Trait Anxiety ---
-col1, col2 = st.columns(2)
+# --- Create interactive Plotly bar chart (interactive legend built-in) ---
+fig = px.bar(
+    df,
+    x='Year_of_Study',
+    color='Sex',
+    barmode='group',
+    title='Gender Distribution by Year of Study',
+    labels={'Year_of_Study': 'Year of Study', 'Sex': 'Sex'},
+)
 
-with col1:
-    fig, ax = plt.subplots(figsize=(7, 4))
-    sns.histplot(df['psqi_2_groups'], kde=True, color='skyblue', ax=ax)
-    ax.set_title("Distribution of Sleep Quality (PSQI)", fontsize=12)
-    ax.set_xlabel("PSQI Score (Higher = Poorer Sleep)")
-    ax.set_ylabel("Number of Students")
-    st.pyplot(fig)
+# --- Customize layout ---
+fig.update_layout(
+    yaxis_title="Number of Students",
+    xaxis_title="Year of Study",
+    title_x=0.5,
+    legend_title="Click to Hide/Show Sex Group",
+    plot_bgcolor='rgba(0,0,0,0)',
+    hovermode="x unified"
+)
 
-with col2:
-    fig2, ax2 = plt.subplots(figsize=(7, 4))
-    sns.histplot(df['Trait_Anxiety'], kde=True, color='salmon', ax=ax2)
-    ax2.set_title("Distribution of Trait Anxiety", fontsize=12)
-    ax2.set_xlabel("Trait Anxiety Score")
-    ax2.set_ylabel("Number of Students")
-    st.pyplot(fig2)
+# --- Display chart in Streamlit ---
+st.plotly_chart(fig, use_container_width=True)
 
-# --- Scatterplot with Regression: PSQI vs Trait Anxiety ---
-fig3, ax3 = plt.subplots(figsize=(7, 5))
-sns.regplot(x='psqi_2_groups', y='Trait_Anxiety', data=df, scatter_kws={'alpha':0.6}, color='purple', ax=ax3)
-r, p = stats.pearsonr(df['psqi_2_groups'].dropna(), df['Trait_Anxiety'].dropna())
-ax3.text(0.02, 0.95, f"r = {r:.2f}, p = {p:.4f}", transform=ax3.transAxes)
-ax3.set_xlabel("PSQI (Higher = Worse Sleep)")
-ax3.set_ylabel("Trait Anxiety Score")
-ax3.set_title("Relationship Between Sleep Quality and Trait Anxiety")
-st.pyplot(fig3)
+# --- Interpretation section ---
+st.subheader("📊 Interpretation")
 
-st.markdown(f"""
-*Interpretation:*  
-A positive correlation (*r = {r:.2f}*) indicates that students with poorer sleep (higher PSQI scores)  
-tend to have higher anxiety levels. This pattern mirrors findings by Norbury & Evans (2018).
+st.markdown("""
+1. This chart displays **gender distribution** across different years of study.  
+2. You can **click the legend labels** (e.g., “Sex 1” or “Sex 2”) to hide or show specific gender groups interactively.  
+3. The hover tooltips show exact student counts per category.  
+4. The overall distribution shows both male and female students in all study years, with slightly higher numbers in early years.
 """)
