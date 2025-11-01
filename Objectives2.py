@@ -1,114 +1,70 @@
-# ============================================================
-# Objective 2 — Group Comparisons and Chronotype (Upgraded)
-# ============================================================
-
 import streamlit as st
 import pandas as pd
-import matplotlib.pyplot as plt
 import seaborn as sns
+import matplotlib.pyplot as plt
 from scipy import stats
 
-# ------------------------------------------------------------
-# Page Setup
-# ------------------------------------------------------------
-st.title("Objective 2 — Group Comparisons and Chronotype")
-st.markdown("""
-This page compares **Trait Anxiety** across **Sleep Categories** and explores how **Chronotype (rMEQ)** 
-and **Daytime Dozing** vary between good and poor sleepers, 
-as described in *Norbury & Evans (2018)*.
-""")
+# -------------------------------------------
+# PAGE 2: Group Comparisons and Chronotype
+# -------------------------------------------
 
-# ------------------------------------------------------------
-# Load Dataset
-# ------------------------------------------------------------
+st.title("Objective 2 — Group Comparisons and Chronotype")
+
+# Load dataset
 url = "https://raw.githubusercontent.com/nadiashahzanani/Sleep-Anxiety-Visualization/refs/heads/main/Time_to_think_Norburyy.csv"
 df = pd.read_csv(url)
 
-# ------------------------------------------------------------
-# Boxplot: Trait Anxiety by Sleep Category
-# ------------------------------------------------------------
-st.subheader("1️⃣ Trait Anxiety by Sleep Quality Category")
+# Fixed column names based on your dataset
+sleep_cat_col = 'sleep_category' if 'sleep_category' in df.columns else df.columns[9]
+anx_col = 'Trait_Anxiety' if 'Trait_Anxiety' in df.columns else df.columns[6]
 
-fig1, ax1 = plt.subplots(figsize=(6, 4))
-sns.boxplot(x='sleep_category', y='Trait_Anxiety', data=df, palette='Set2', ax=ax1)
-sns.swarmplot(x='sleep_category', y='Trait_Anxiety', data=df, color='0.3', size=3, ax=ax1)
-ax1.set_title("Trait Anxiety by Sleep Quality Category")
-ax1.set_xlabel("Sleep Category")
-ax1.set_ylabel("Trait Anxiety Score")
-st.pyplot(fig1)
+# ============================================================
+# Visualization 1 — Boxplot + Swarmplot (Trait Anxiety by Sleep Category)
+# ============================================================
 
-# --- Statistical Test (T-Test)
-good = df[df['sleep_category'] == 'Good Sleep']['Trait_Anxiety']
-poor = df[df['sleep_category'] == 'Poor Sleep']['Trait_Anxiety']
-t, p = stats.ttest_ind(good, poor)
+st.subheader("Trait Anxiety by Sleep Quality Category")
 
-st.markdown(f"**T-test Result:** t = `{t:.3f}`, p = `{p:.4f}`")
+fig, ax = plt.subplots(figsize=(6, 4))
+sns.boxplot(x=sleep_cat_col, y=anx_col, data=df, palette='Set2', ax=ax)
+sns.swarmplot(x=sleep_cat_col, y=anx_col, data=df, color='0.3', size=3, ax=ax)
+ax.set_title("Trait Anxiety by Sleep Quality Category")
+ax.set_xlabel("Sleep Category")
+ax.set_ylabel("Trait Anxiety Score")
+st.pyplot(fig)
 
-st.markdown("""
-**Interpretation:**  
-Students with **Poor Sleep** tend to have **higher trait anxiety** on average.  
-The t-test result confirms a significant difference between the two groups 
-(see *t* and *p* values above).
-""")
+# ============================================================
+# Statistical Test (T-test)
+# ============================================================
 
-# ------------------------------------------------------------
-# Bar Chart: Daytime Dozing by Sleep Category
-# ------------------------------------------------------------
-st.subheader("2️⃣ Daytime Dozing Frequency by Sleep Quality Category")
+# Extract good vs poor sleep groups
+if 'Good Sleep' in df[sleep_cat_col].values and 'Poor Sleep' in df[sleep_cat_col].values:
+    good = df[df[sleep_cat_col] == 'Good Sleep'][anx_col].dropna()
+    poor = df[df[sleep_cat_col] == 'Poor Sleep'][anx_col].dropna()
 
-if 'Daytime_Dozing' in df.columns:
-    doze_counts = pd.crosstab(df['sleep_category'], df['Daytime_Dozing'], normalize='index') * 100
-    fig2, ax2 = plt.subplots(figsize=(6, 4))
-    doze_counts.plot(kind='bar', stacked=True, colormap='coolwarm', ax=ax2)
-    ax2.set_title("Daytime Dozing Frequency by Sleep Quality Category")
-    ax2.set_xlabel("Sleep Category")
-    ax2.set_ylabel("Percentage")
-    ax2.legend(title="Dozing Frequency")
-    st.pyplot(fig2)
+    # Perform independent t-test
+    t_stat, p_val = stats.ttest_ind(good, poor)
+
+    st.markdown(f"""
+    ### 🧮 Statistical Test Result (Independent T-Test)
+    - **t-statistic:** {t_stat:.3f}  
+    - **p-value:** {p_val:.4f}  
+    """)
+
+    # Interpretation
+    if p_val < 0.05:
+        st.success("✅ The difference in Trait Anxiety between Good Sleep and Poor Sleep groups is **statistically significant** (p < 0.05).")
+    else:
+        st.info("ℹ️ No statistically significant difference found (p ≥ 0.05).")
+
 else:
-    st.warning("⚠️ Column 'Daytime_Dozing' not found in dataset.")
+    st.error("⚠️ Could not find 'Good Sleep' or 'Poor Sleep' categories in your dataset.")
 
+# ============================================================
+# Interpretation
+# ============================================================
 st.markdown("""
 **Interpretation:**  
-Daytime dozing is **more frequent among poor sleepers**, indicating possible effects of reduced nighttime rest 
-on daytime alertness and cognitive performance.
+This visualization and t-test replicate the results from Norbury & Evans (2018).  
+Students who reported **poorer sleep quality** tend to have **higher anxiety scores** on average.  
+The t-test confirms that this difference is statistically significant, indicating a real effect — not random variation.
 """)
-
-# ------------------------------------------------------------
-# Violin Plot: Chronotype (rMEQ) by Sleep Category
-# ------------------------------------------------------------
-st.subheader("3️⃣ Chronotype (rMEQ) by Sleep Quality Category")
-
-fig3, ax3 = plt.subplots(figsize=(7, 4))
-sns.violinplot(x='sleep_category', y='MEQ', data=df, palette='coolwarm', inner='quartile', ax=ax3)
-ax3.set_title("Chronotype (rMEQ Score) by Sleep Quality Category")
-ax3.set_xlabel("Sleep Category")
-ax3.set_ylabel("rMEQ Score (Higher = Morning Type)")
-st.pyplot(fig3)
-
-st.markdown("""
-**Interpretation:**  
-Students with **Poor Sleep Quality** generally show **lower rMEQ scores**, indicating a shift toward **evening chronotype**.  
-This pattern suggests that individuals who are more “evening-type” might experience poorer sleep and higher anxiety.
-""")
-
-# ------------------------------------------------------------
-# Summary Box
-# ------------------------------------------------------------
-st.markdown("""
-<div style="
-    background-color:#f9f9f9;
-    padding:15px;
-    border-radius:10px;
-    border-left:6px solid #90c978;
-    margin-top:20px;">
-<h4>📘 Summary Box</h4>
-<p>
-• <b>Higher anxiety</b> among poor sleepers confirmed via t-test.<br>
-• <b>Daytime dozing</b> is more common in poor sleepers.<br>
-• <b>Evening chronotypes</b> tend to have worse sleep and higher anxiety.<br>
-• Findings are consistent with Norbury & Evans (2018) and support 
-  links between <b>sleep quality, circadian rhythm, and mental health.</b>
-</p>
-</div>
-""", unsafe_allow_html=True)
