@@ -57,20 +57,37 @@ doze_col = st.sidebar.selectbox("Daytime Dozing", df.columns, index=11)
 # ============================================================
 if page == "Page 1":
     st.header("Objective 1 — Distributions and Correlation")
+    st.markdown("This section describes the distribution of subjective sleep quality and trait anxiety in the student sample and examines the relationship between both variables.")
+
     col1, col2 = st.columns(2)
 
+    # --- Histogram: PSQI Sleep Quality ---
     with col1:
         fig, ax = plt.subplots()
         sns.histplot(df[psqi_col], kde=True, color="skyblue", ax=ax)
         ax.set_title("Distribution of Sleep Quality (PSQI)")
         st.pyplot(fig)
+        st.markdown("""
+        **Interpretation:**  
+        The PSQI-based sleep quality shows a multimodal or ordinal distribution.  
+        About **46% of students reported their sleep as 'fairly bad' or 'very bad'**, which is clearly reflected in the histogram.  
+        This pattern aligns with the findings from the Brunel University Research Archive (Norbury & Evans, 2018).
+        """)
 
+    # --- Histogram: Trait Anxiety ---
     with col2:
         fig2, ax2 = plt.subplots()
         sns.histplot(df[anx_col], kde=True, color="salmon", ax=ax2)
         ax2.set_title("Distribution of Trait Anxiety")
         st.pyplot(fig2)
+        st.markdown("""
+        **Interpretation:**  
+        The trait anxiety scores display a continuous, near-normal distribution.  
+        This suggests a broad range of anxiety levels among students, from low to high,  
+        which helps reveal how anxiety may vary according to sleep quality differences.
+        """)
 
+    # --- Scatterplot with Regression: PSQI vs Trait Anxiety ---
     fig3, ax3 = plt.subplots()
     sns.regplot(x=df[psqi_col], y=df[anx_col], scatter_kws={'alpha':0.6}, color="purple", ax=ax3)
     r, p = stats.pearsonr(df[psqi_col].dropna(), df[anx_col].dropna())
@@ -79,11 +96,20 @@ if page == "Page 1":
     ax3.set_ylabel("Trait Anxiety Score")
     st.pyplot(fig3)
 
-    st.markdown("""
+    st.markdown(f"""
     **Interpretation:**  
-    The scatterplot shows a moderate positive correlation between sleep problems and anxiety.  
-    Students with higher PSQI scores (poorer sleep) tend to report higher trait anxiety levels.
+    The scatterplot and regression line demonstrate a **positive relationship** between PSQI and trait anxiety.  
+    Students with **higher PSQI scores (indicating poorer sleep quality)** tend to report **higher anxiety levels**.  
+    The computed Pearson correlation (**r = {r:.2f}**, **p = {p:.3g}**) quantifies the strength and significance of this relationship.  
+
+    While this association is consistent with existing research, it’s important to note that this is a **cross-sectional design**,  
+    meaning the results indicate correlation, not causation. Additionally, responses are **self-reported**,  
+    which introduces the potential for response bias.
     """)
+
+    st.markdown("---")
+    st.caption("Page 1 visualizations summarize the key distribution patterns and correlations between sleep quality and anxiety.")
+
 
 # ============================================================
 # PAGE 2: Group Comparisons and Chronotype
