@@ -76,3 +76,46 @@ st.markdown("""
 3. The distribution is **bimodal**, meaning there are two peaks at PSQI = 1 and 2, showing that sleep quality tends to cluster into distinct categories.  
 4. This interactive legend helps explore how different PSQI groups contribute to the overall pattern.
 """)
+
+# --- Interactive Box Plot with Legend Control ---
+st.subheader("1. Sleep Quality (PSQI) by Year of Study (Interactive Legend)")
+
+fig = px.box(
+    df,
+    x='Year_of_Study',
+    y='psqi_2_groups',
+    color='Sex',
+    title='Sleep Quality (PSQI) by Year of Study',
+    labels={
+        'Year_of_Study': 'Year of Study',
+        'psqi_2_groups': 'PSQI Score (1 = Good, 2 = Poor)',
+        'Sex': 'Gender'
+    },
+    points='all',  # show individual data points
+    color_discrete_sequence=px.colors.qualitative.Set2
+)
+
+# --- Improve Layout & Interactivity ---
+fig.update_layout(
+    yaxis_title="PSQI Score (1 = Good, 2 = Poor)",
+    xaxis_title="Year of Study",
+    plot_bgcolor="rgba(0,0,0,0)",
+    paper_bgcolor="rgba(0,0,0,0)",
+    title_font=dict(size=18),
+    legend_title_text="Click to Filter by Gender",  # encourage legend interaction
+)
+
+# --- Add helpful instructions ---
+st.markdown("💡 **Tip:** Click on the legend items (e.g., *Male*, *Female*) to hide or show them interactively!")
+
+# --- Display interactive chart in Streamlit ---
+st.plotly_chart(fig, use_container_width=True)
+
+# --- Interpretation ---
+st.markdown("### **Interpretation:**")
+st.markdown("""
+1. The chart is fully interactive — click the legend to isolate or compare genders.  
+2. Students from Year 1 and Year 2 generally show a mix of good and poor sleepers (PSQI ≈ 1–2).  
+3. Year 3 students mostly show better sleep (lower PSQI scores).  
+4. The spread of data suggests sleep quality differences are small but noticeable across years.
+""")
