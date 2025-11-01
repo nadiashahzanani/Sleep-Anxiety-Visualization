@@ -43,6 +43,14 @@ st.dataframe(df.head())
 # Sidebar Navigation
 page = st.sidebar.radio("Select Page", ["Page 1", "Page 2", "Page 3"])
 
+# Sidebar Variable Mapping
+st.sidebar.header("Variable Mapping")
+psqi_col = st.sidebar.selectbox("Sleep Quality (PSQI)", df.columns, index=8)
+anx_col  = st.sidebar.selectbox("Trait Anxiety", df.columns, index=6)
+chrono_col = st.sidebar.selectbox("Chronotype (rMEQ)", df.columns, index=5)
+sleep_cat_col = st.sidebar.selectbox("Sleep Category", df.columns, index=9)
+start_col = st.sidebar.selectbox("Preferred Start Time", df.columns, index=10)
+doze_col = st.sidebar.selectbox("Daytime Dozing", df.columns, index=11)
 
 # ============================================================
 # PAGE 1: Distributions and Correlation
