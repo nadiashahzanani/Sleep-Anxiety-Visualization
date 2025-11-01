@@ -20,7 +20,7 @@ start_col = "Start_time_code" if "Start_time_code" in df.columns else df.columns
 st.subheader("1. University Start Time by Sleep Class")
 
 # ✅ Match Google Colab’s output (remove warning)
-fig, ax = plt.subplots(figsize=(6,4))
+fig, ax = plt.subplots(figsize=(4,2))
 sns.countplot(x=start_col, hue=sleep_cat_col, data=df, palette='muted', ax=ax)
 ax.set_title("Preferred Uni Start Time by Sleep Category")
 ax.set_xlabel("Start Time Code")
