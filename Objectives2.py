@@ -131,23 +131,45 @@ else:
 # -----------------------------------------------------------
 # Step 4: Chronotype (rMEQ Score) by Sleep Quality Category
 # -----------------------------------------------------------
-fig, ax = plt.subplots(figsize=(7,4))
-sns.violinplot(
+# --- Create the interactive violin plot ---
+st.subheader("1. Chronotype (rMEQ Score) by Sleep Quality Category (Interactive)")
+
+fig = px.violin(
+    df,
     x='sleep_category',
     y='MEQ',
-    data=df,
-    palette='coolwarm',
-    inner='quartile',
-    ax=ax
+    color='sleep_category',
+    box=True,  # adds boxplot inside the violin
+    points='all',  # show individual points
+    title='Chronotype (rMEQ Score) by Sleep Quality Category',
+    labels={
+        'sleep_category': 'Sleep Category',
+        'MEQ': 'rMEQ Score (Higher = Morning Type)'
+    },
+    color_discrete_sequence=px.colors.qualitative.Set2
 )
-ax.set_title("Chronotype (rMEQ Score) by Sleep Quality Category")
-ax.set_xlabel("Sleep Category")
-ax.set_ylabel("rMEQ Score (Higher = Morning Type)")
-st.pyplot(fig)
 
+# --- Improve layout and interaction ---
+fig.update_layout(
+    showlegend=False,  # no need for legend since color = x
+    plot_bgcolor='rgba(0,0,0,0)',
+    paper_bgcolor='rgba(0,0,0,0)',
+    title_font=dict(size=18),
+    xaxis_title='Sleep Quality Category',
+    yaxis_title='rMEQ Score (Higher = Morning Type)',
+)
+
+# --- Add usage tip ---
+st.markdown("💡 **Tip:** Hover over the violins or data points to see exact rMEQ scores interactively!")
+
+# --- Display the Plotly chart in Streamlit ---
+st.plotly_chart(fig, use_container_width=True)
+
+# --- Interpretation ---
+st.markdown("### **Interpretation:**")
 st.markdown("""
-*Interpretation:*  
-This violin plot visualizes how chronotype (morningness–eveningness score) differs by sleep quality.  
-Students with *poorer sleep* tend to show *lower rMEQ scores, indicating they are more **evening-type*.  
-Those with *better sleep* usually score higher, showing stronger *morning preference*.
+1. This plot shows how being a *morning* or *evening* type (rMEQ score) relates to sleep quality.  
+2. Among students with **good sleep**, most have mid-range rMEQ scores — meaning they’re neither extreme morning nor evening types.  
+3. Some students with **poor sleep** lean toward eveningness (lower rMEQ scores).  
+4. Overall, **good sleepers** include a mix of chronotypes, but slightly more lean toward morning types.
 """)
