@@ -2,7 +2,6 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-import plotly.express as px
 
 st.title("Objective 3 — Preferred Start Time & Correlation Matrix")
 
@@ -10,51 +9,31 @@ st.title("Objective 3 — Preferred Start Time & Correlation Matrix")
 url = "https://raw.githubusercontent.com/nadiashahzanani/Sleep-Anxiety-Visualization/refs/heads/main/Time_to_think_Norburyy.csv"
 df = pd.read_csv(url)
 
-# --- Check if column exists ---
-if 'Start_time_code' in df.columns and 'sleep_category' in df.columns:
-    
-    st.subheader("1. Preferred University Start Time by Sleep Category (Interactive)")
+# Fixed column names (adjust as per your dataset)
+psqi_col = "PSQI_Score" if "PSQI_Score" in df.columns else df.columns[8]
+anx_col = "Trait_Anxiety" if "Trait_Anxiety" in df.columns else df.columns[6]
+chrono_col = "MEQ" if "MEQ" in df.columns else df.columns[5]
+sleep_cat_col = "sleep_category" if "sleep_category" in df.columns else df.columns[9]
+start_col = "Start_time_code" if "Start_time_code" in df.columns else df.columns[10]
 
-    # --- Plotly Interactive Bar Chart ---
-    fig = px.bar(
-        df,
-        x='Start_time_code',
-        color='sleep_category',
-        title='Preferred University Start Time by Sleep Category',
-        labels={
-            'Start_time_code': 'Preferred Start Time Code',
-            'sleep_category': 'Sleep Category'
-        },
-        barmode='group',
-        color_discrete_sequence=px.colors.qualitative.Set2
-    )
+# --- Bar Chart: Preferred Start Time by Sleep Category ---
+st.subheader("Preferred University Start Time by Sleep Category")
 
-    # --- Improve layout for clarity ---
-    fig.update_layout(
-        xaxis_title="Preferred Start Time Code",
-        yaxis_title="Number of Students",
-        legend_title="Sleep Category",
-        plot_bgcolor="rgba(0,0,0,0)",
-        paper_bgcolor="rgba(0,0,0,0)",
-        title_font=dict(size=18),
-        legend=dict(title_font=dict(size=12))
-    )
+# ✅ Match Google Colab’s output (remove warning)
+fig, ax = plt.subplots(figsize=(7,4))
+sns.countplot(x=start_col, hue=sleep_cat_col, data=df, palette='muted', ax=ax)
+ax.set_title("Preferred University Start Time by Sleep Category")
+ax.set_xlabel("Preferred Start Time Code")
+ax.set_ylabel("Number of Students")
+ax.legend(title="Sleep Category")
+st.pyplot(fig)
 
-    # --- Add interactive legend note ---
-    st.markdown("💡 **Tip:** Click the legend items to hide or show each sleep category interactively.")
-
-    # --- Display interactive chart ---
-    st.plotly_chart(fig, use_container_width=True)
-
-    # --- Interpretation ---
-    st.markdown("### **Interpretation:**")
-    st.markdown("""
-    1. The chart shows when students with good vs. poor sleep prefer classes to start.  
-    2. Most **good sleepers** prefer class start times around **code 5–6**, likely corresponding to mid-morning (≈ 9–10 AM).  
-    3. Fewer students prefer very early (code 3–4) or very late (code 8–9) start times.  
-    4. This suggests that **good sleepers tend to favor moderate start times**, not too early or too late.
-    """)
-
+st.markdown("""
+*Interpretation:*  
+This chart shows how students’ preferred class start times relate to their sleep category.  
+Students with *poorer sleep quality* often prefer *later start times*, while good sleepers prefer earlier classes.  
+This pattern supports the idea that evening chronotypes align with delayed daily schedules.
+""")
 
 
 # --- Scatter Plot: Anxiety vs Sleep Quality (Colored by Start Time) ---
