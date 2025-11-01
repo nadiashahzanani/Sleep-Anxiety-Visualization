@@ -58,6 +58,13 @@ if 'Start_time_code' in df.columns:
     # Show the plot in Streamlit
     st.pyplot(fig)
 
+    st.markdown("""
+    **Interpretation:**  
+    1. Students with poor sleep (PSQI = 2) are often to have the higher anxiety scores compared to good sleepers (PSQI = 1).
+    2. The different colors (start times) are spread across both groups, showing that preferred start time does not strongly separate anxiety levels or sleep quality.
+    """)
+    
+
 # --- Correlation Heatmap ---
 st.subheader("Correlation Heatmap")
 # Use the exact 3 columns from your Colab
@@ -76,8 +83,8 @@ st.pyplot(fig)
 
 st.markdown("""
 **Interpretation:**  
-This heatmap mirrors the Google Colab visualization.  
-It shows correlation values among **Sleep Quality (PSQI)**, **Trait Anxiety**, and **Chronotype (MEQ)**.  
-Positive values (red) indicate that higher PSQI relates to higher anxiety,  
-while negative values (blue) show inverse relationships.
+1. Sleep quality and anxiety are moderately linked (0.29), showing that poorer sleep is associated with higher anxiety.
+2. Sleep quality and morningness (MEQ) have a weak negative link (-0.23), meaning poorer sleepers tend to be less “morning-type.”
+3. The positive correlation between PSQI and Trait Anxiety supports existing research that anxiety negatively affects sleep quality.
+4. The negative correlations with MEQ suggest that evening-oriented individuals may experience both higher anxiety and poorer sleep, aligning with circadian rhythm findings.
 """)
