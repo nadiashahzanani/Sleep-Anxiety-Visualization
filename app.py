@@ -117,31 +117,57 @@ if page == "Page 1":
 if page == "Page 2":
     st.header("Objective 2 — Group Comparisons and Chronotype")
 
+    # --- Boxplot: Trait Anxiety by Sleep Category ---
     fig4, ax4 = plt.subplots()
     sns.boxplot(x=sleep_cat_col, y=anx_col, data=df, palette="Set2", ax=ax4)
     sns.stripplot(x=sleep_cat_col, y=anx_col, data=df, color="0.3", size=3, ax=ax4)
     ax4.set_title("Trait Anxiety by Sleep Category")
     st.pyplot(fig4)
 
-    # T-test
+    # T-test to compare anxiety between good vs poor sleepers
     groups = [grp[anx_col].dropna() for _, grp in df.groupby(sleep_cat_col)]
     if len(groups) == 2:
         t, p = stats.ttest_ind(groups[0], groups[1], equal_var=False)
         st.write(f"**T-test Result:** t = {t:.2f}, p = {p:.4f}")
 
+    # --- Interpretation for Boxplot ---
+    st.markdown("""
+    **Interpretation:**  
+    The boxplot shows that students with poorer sleep tend to have higher median anxiety levels.  
+    This is supported by the T-test result, which indicates a statistically significant difference in anxiety between good and poor sleepers (report *t* and *p* above).  
+    This suggests that poorer subjective sleep quality is associated with higher levels of anxiety among university students.
+    """)
+
+    # --- Bar Chart: Daytime Dozing by Sleep Category ---
     st.markdown("#### Daytime Dozing by Sleep Category")
     ctab = pd.crosstab(df[sleep_cat_col], df[doze_col], normalize='index') * 100
     st.bar_chart(ctab)
 
+    # --- Interpretation for Daytime Dozing ---
+    st.markdown("""
+    **Interpretation:**  
+    The bar chart reveals that daytime dozing is more common among poor sleepers.  
+    This supports the idea that insufficient or low-quality nighttime sleep may lead to increased daytime fatigue or sleepiness,  
+    a plausible functional consequence observed in students with poorer sleep quality.
+    """)
+
+    # --- Violin Plot: Chronotype (rMEQ) by Sleep Category ---
     fig5, ax5 = plt.subplots()
     sns.violinplot(x=sleep_cat_col, y=chrono_col, data=df, inner='quartile', palette="coolwarm", ax=ax5)
     ax5.set_title("Chronotype (rMEQ) by Sleep Category")
     st.pyplot(fig5)
 
+    # --- Interpretation for Chronotype ---
     st.markdown("""
     **Interpretation:**  
-    Students with poorer sleep tend to show later chronotypes (evening types) and report higher anxiety levels.
+    The violin plot suggests that students with poorer sleep quality tend to show lower rMEQ scores,  
+    indicating a shift toward eveningness chronotype patterns.  
+    While this might imply a relationship between being an “evening type” and poor sleep or higher anxiety,  
+    formal mediation analysis (such as regression or bootstrapping) is needed to test this statistically.  
+    The original study reported that chronotype did **not** mediate the sleep–anxiety relationship,  
+    so this visualization provides descriptive support for that conclusion rather than causal evidence.
     """)
+
 
 # ============================================================
 # PAGE 3: Preferred Start Time & Correlation Matrix
