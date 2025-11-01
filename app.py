@@ -185,6 +185,24 @@ if page == "Page 2":
     so this visualization provides descriptive support for that conclusion rather than causal evidence.
     """)
 
+    # --- Summary Box ---
+    st.markdown("""
+    <div style="
+        background-color:#f9f9f9;
+        padding:15px;
+        border-radius:10px;
+        border-left:6px solid #90c978;
+        margin-top:20px;">
+    <h4>📘 Summary Box</h4>
+    <p>
+    • Poor sleepers exhibit <b>significantly higher anxiety</b> levels (see t-test).<br>
+    • Daytime dozing is more frequent among those with poor sleep.<br>
+    • Chronotype patterns show that <b>evening-type students</b> tend to experience poorer sleep and higher anxiety.<br>
+    • Findings align with literature showing sleep irregularity and circadian misalignment affect mental wellbeing.
+    </p>
+    </div>
+    """, unsafe_allow_html=True)
+
 
 # ============================================================
 # PAGE 3: Preferred Start Time & Correlation Matrix
@@ -232,6 +250,27 @@ if page == "Page 3":
     **Next Steps:** Future work can use multivariate regression controlling for **age** and **gender**,  
     and explore whether **chronotype acts as a mediator** between sleep quality and anxiety.
     """)
+
+    # --- Summary Box ---
+    st.markdown("""
+    <div style="
+        background-color:#fff8e6;
+        padding:15px;
+        border-radius:10px;
+        border-left:6px solid #ffb74d;
+        margin-top:20px;">
+    <h4>📘 Summary Box</h4>
+    <p>
+    • Preferred start time is strongly tied to <b>chronotype</b> (morning vs evening types).<br>
+    • Later start preferences moderately relate to <b>poorer sleep</b> and <b>higher anxiety</b>.<br>
+    • Correlation heatmap confirms notable links: 
+      <b>Anxiety ↔ PSQI</b> and <b>PSQI ↔ Daytime Dozing</b> (r ≈ 0.35).<br>
+    • Recommended next steps include <b>multivariate regression</b> 
+      controlling for demographic variables and mediation testing (chronotype as mediator).
+    </p>
+    </div>
+    """, unsafe_allow_html=True)
+
 
 st.markdown("---")
 st.caption("Created by Nadia Shahzanani © 2025 | Scientific Visualization Project")
