@@ -38,12 +38,6 @@ This pattern supports the idea that evening chronotypes align with delayed daily
 
 # --- Scatterplot: Anxiety vs Sleep Quality by Start Time ---
 st.subheader("Scatterplot: Anxiety vs PSQI by Start Time")
-
-# Adjust here if the column names are slightly different
-psqi_col = 'psqi_2_groups'
-anx_col = 'Trait_Anxiety'
-start_col = 'Start_time_code'
-
 missing_cols = [col for col in [psqi_col, anx_col, start_col] if col not in df.columns]
 if missing_cols:
     st.error(f"Missing columns in dataset: {', '.join(missing_cols)}")
