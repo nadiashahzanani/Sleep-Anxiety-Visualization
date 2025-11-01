@@ -1,8 +1,9 @@
 import pandas as pd
 import plotly.express as px
 
-# Load your data (make sure the file path is correct)
-df = pd.read_csv("https://raw.githubusercontent.com/username/repo/main/Time_to_think_Norbury.csv")
+# Load dataset
+url = "https://raw.githubusercontent.com/nadiashahzanani/Sleep-Anxiety-Visualization/refs/heads/main/Time_to_think_Norburyy.csv"
+df = pd.read_csv(url)
 
 # Now you can group or plot it safely
 plot_df = df.groupby(['Year_of_Study', 'Sex']).size().unstack(fill_value=0)
