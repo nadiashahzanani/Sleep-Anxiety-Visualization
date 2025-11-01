@@ -68,3 +68,27 @@ if 'Daytime_Dozing' in df.columns and 'sleep_category' in df.columns:
     """)
 else:
     st.warning("⚠️ Column 'Daytime_Dozing' or 'sleep_category' not found in dataset.")
+
+# -----------------------------------------------------------
+# Step 4: Chronotype (rMEQ Score) by Sleep Quality Category
+# -----------------------------------------------------------
+fig, ax = plt.subplots(figsize=(7,4))
+sns.violinplot(
+    x='sleep_category',
+    y='MEQ',
+    data=df,
+    palette='coolwarm',
+    inner='quartile',
+    ax=ax
+)
+ax.set_title("Chronotype (rMEQ Score) by Sleep Quality Category")
+ax.set_xlabel("Sleep Category")
+ax.set_ylabel("rMEQ Score (Higher = Morning Type)")
+st.pyplot(fig)
+
+st.markdown("""
+**Interpretation:**  
+This violin plot visualizes how chronotype (morningness–eveningness score) differs by sleep quality.  
+Students with **poorer sleep** tend to show **lower rMEQ scores**, indicating they are more **evening-type**.  
+Those with **better sleep** usually score higher, showing stronger **morning preference**.
+""")
