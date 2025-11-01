@@ -49,8 +49,24 @@ if 'Start_time_code' in df.columns: # Assuming 'Start_time_code' is related to p
 
 # --- Correlation Heatmap ---
 st.subheader("Correlation Heatmap")
-numeric = df.select_dtypes(include='number')
-corr = numeric.corr()
-fig2, ax2 = plt.subplots(figsize=(7,5))
-sns.heatmap(corr, annot=True, cmap="vlag", ax=ax2)
-st.pyplot(fig2)
+# Use the exact 3 columns from your Colab
+selected_cols = ['psqi_2_groups', 'Trait_Anxiety', 'MEQ']
+
+# Compute correlation matrix
+corr = df[selected_cols].corr()
+
+# Plot same style as in Colab
+fig, ax = plt.subplots(figsize=(7,5))
+sns.heatmap(corr, annot=True, cmap='vlag', vmin=-1, vmax=1, ax=ax)
+ax.set_title("Correlation Heatmap of Key Variables")
+
+# Show in Streamlit
+st.pyplot(fig)
+
+st.markdown("""
+**Interpretation:**  
+This heatmap mirrors the Google Colab visualization.  
+It shows correlation values among **Sleep Quality (PSQI)**, **Trait Anxiety**, and **Chronotype (MEQ)**.  
+Positive values (red) indicate that higher PSQI relates to higher anxiety,  
+while negative values (blue) show inverse relationships.
+""")
