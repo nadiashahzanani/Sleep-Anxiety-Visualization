@@ -36,16 +36,26 @@ This pattern supports the idea that evening chronotypes align with delayed daily
 """)
 
 
-# --- Scatter Plot: Anxiety vs Sleep Quality (Colored by Start Time) --- 
-if 'Start_time_code' in df.columns: # Assuming 'Start_time_code' is related to preferred start time 
-    plt.figure(figsize=(7,5)) 
-    sns.scatterplot(x='psqi_2_groups', y='Trait_Anxiety', hue='Start_time_code', data=df, palette='Spectral') 
-    plt.title("Trait Anxiety vs Sleep Quality by Preferred Start Time") 
-    plt.xlabel("Sleep Quality (PSQI)") 
-    plt.ylabel("Trait Anxiety") 
-    plt.legend(title="Preferred Start Time Code") 
-    plt.show()
-
+# --- Scatter Plot: Anxiety vs Sleep Quality (Colored by Start Time) ---
+if 'Start_time_code' in df.columns:
+    st.subheader("Trait Anxiety vs Sleep Quality by Preferred Start Time")
+    
+    # Create the figure
+    fig, ax = plt.subplots(figsize=(7,5))
+    sns.scatterplot(
+        x='psqi_2_groups', 
+        y='Trait_Anxiety', 
+        hue='Start_time_code', 
+        data=df, 
+        palette='Spectral',
+        ax=ax
+    )
+    ax.set_xlabel("Sleep Quality (PSQI)")
+    ax.set_ylabel("Trait Anxiety")
+    ax.set_title("Trait Anxiety vs Sleep Quality by Preferred Start Time")
+    
+    # Show the plot in Streamlit
+    st.pyplot(fig)
 
 # --- Correlation Heatmap ---
 st.subheader("Correlation Heatmap")
