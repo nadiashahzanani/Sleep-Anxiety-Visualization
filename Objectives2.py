@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from scipy import stats
+import plotly.express as px
 
 st.title("Objective 2 — Group Comparisons and Chronotype")
 
@@ -22,31 +23,48 @@ else:
 
 st.success("✅ 'sleep_category' column created successfully!")
 
-# ------------------------------------------------------------
-# Step 2: Boxplot — Trait Anxiety by Sleep Category
-# ------------------------------------------------------------
-if 'Trait_Anxiety' in df.columns:
-    fig, ax = plt.subplots(figsize=(6,4))
-    sns.boxplot(x='sleep_category', y='Trait_Anxiety', data=df, palette='Set2', ax=ax)
-    sns.swarmplot(x='sleep_category', y='Trait_Anxiety', data=df, color='0.3', size=3, ax=ax)
-    ax.set_title("Trait Anxiety by Sleep Quality Category")
-    ax.set_xlabel("Sleep Category")
-    ax.set_ylabel("Trait Anxiety Score")
-    st.pyplot(fig)
+# --- Interactive Box Plot using Plotly ---
+st.subheader("1. Trait Anxiety by Sleep Quality Category (Interactive)")
 
-    # Optional statistical test
-    good = df[df['sleep_category'] == 'Good Sleep']['Trait_Anxiety']
-    poor = df[df['sleep_category'] == 'Poor Sleep']['Trait_Anxiety']
-    t, p = stats.ttest_ind(good, poor, equal_var=False)
-    st.write(f"*T-test Result:* t = {t:.2f}, p = {p:.4f}")
+fig = px.box(
+    df,
+    x='sleep_category',
+    y='Trait_Anxiety',
+    color='sleep_category',
+    title='Trait Anxiety by Sleep Quality Category',
+    labels={
+        'sleep_category': 'Sleep Category',
+        'Trait_Anxiety': 'Trait Anxiety Score'
+    },
+    hover_data=['Trait_Anxiety'],  # show details on hover
+    color_discrete_sequence=px.colors.qualitative.Set2,
+    points='all'  # show individual data points for transparency
+)
 
-    st.markdown("""
-    *Interpretation:*  
-    The boxplot shows that students with *poor sleep quality* tend to have *higher trait anxiety* scores.  
-    This pattern matches the Google Colab results — confirming a meaningful difference between Good and Poor Sleep groups.  
-    """)
-else:
-    st.error("⚠ Column 'Trait_Anxiety' not found in dataset.")
+# --- Customize layout for a cleaner look ---
+fig.update_layout(
+    yaxis_title="Trait Anxiety Score",
+    xaxis_title="Sleep Category",
+    plot_bgcolor="rgba(0,0,0,0)",
+    paper_bgcolor="rgba(0,0,0,0)",
+    title_font=dict(size=18),
+    showlegend=False
+)
+
+# --- Display interactive chart in Streamlit ---
+st.plotly_chart(fig, use_container_width=True)
+
+# --- Interpretation ---
+st.markdown("### **Interpretation:**")
+st.markdown("""
+1. Students with **good sleep** tend to have moderate anxiety levels (around 45–50).  
+2. Some good sleepers have **low anxiety** (25–30), while a few show **higher anxiety** (around 70).  
+3. Students with **poor sleep** generally show a higher spread and slightly higher average anxiety.  
+4. The wider box height indicates **greater variability** in anxiety among those with good sleep.
+""")
+
+# --- Interaction Tip ---
+st.markdown("💡 **Tip:** Hover over individual points to see exact anxiety scores. You can also zoom, pan, or export the graph.")
 
 # ------------------------------------------------------------
 # Step 3: Daytime Dozing Frequency by Sleep Quality Category
