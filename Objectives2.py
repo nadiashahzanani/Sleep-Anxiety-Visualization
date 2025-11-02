@@ -8,7 +8,7 @@ import plotly.express as px
 import statsmodels.api as sm
 
 
-st.title("Objectives 2 - Explore the relationship sleep quality, anxiety levels and daytime dozing")
+st.title("Objectives 2 - Explore the Relationship Sleep Quality, Anxiety Levels and Daytime Dozing")
 
 # Load dataset
 url = "https://raw.githubusercontent.com/nadiashahzanani/Sleep-Anxiety-Visualization/refs/heads/main/Time_to_think_Norburyy.csv"
@@ -37,11 +37,6 @@ col4.metric(
     help="Number of students"
 )
 
-
-# ------------------------------------------------------------
-# Step 1: Create Sleep Category (Good vs Poor)
-# ------------------------------------------------------------
-
 # --- Ensure 'Chronotype' column exists ---
 if 'Chronotype' not in df.columns:
     # Example thresholds for MEQ scores
@@ -62,13 +57,14 @@ r_squared = model.rsquared
 p_value = model.pvalues[1]  # p-value for 'psqi_2_groups'
 
 # --- Create Plotly scatter plot with regression line ---
+st.subheader("2.1. Scatter Plot of Sleep Quality vs Trait Anxiety with Regression Line")
 fig = px.scatter(
     df,
     x='psqi_2_groups',
     y='Trait_Anxiety',
     color='Chronotype',
     trendline="ols",  # adds regression line automatically
-    title=f"Sleep Quality vs Trait Anxiety (R² = {r_squared:.2f}, p = {p_value:.4f})",
+    title=f" - Sleep Quality vs Trait Anxiety (R² = {r_squared:.2f}, p = {p_value:.4f})",
     labels={'psqi_2_groups': 'PSQI (Sleep Quality)', 'Trait_Anxiety': 'Trait Anxiety'}
 )
 
@@ -76,7 +72,7 @@ fig = px.scatter(
 st.plotly_chart(fig, use_container_width=True)
 
 # --- Optional Interpretation ---
-st.markdown("Interpretation")
+st.subheader("Interpretation")
 st.markdown("""
 1. This scatter plot shows how sleep quality relates to trait anxiety, with colors representing different chronotypes.  
 2. As sleep quality worsens, anxiety generally increases, and the regression line confirms this upward trend.  
@@ -84,9 +80,8 @@ st.markdown("""
     """)
 
 
-# ------------------------------------------------------------
-# Step 2: Daytime Dozing Frequency by Sleep Quality Category
-# ------------------------------------------------------------
+st.subheader("2.2. Correlation matrix heatmap (continuous measures)")
+
 # Select continuous columns for correlation
 continuous_cols = ['psqi_2_groups', 'Trait_Anxiety', 'Avg_Weekly_Sleep_Duration',
                        'Avg_Sleep_Working_days', 'Avg_sleep_free_days', 'Daytime_Dozing', 'Age', 'MEQ', 'Sleep_category']
@@ -102,7 +97,7 @@ if continuous_cols:
     fig = px.imshow(corr_matrix,
                     text_auto=True,          # Annotate with correlation values
                     aspect="auto",
-                    title='Correlation Matrix Heatmap of Key Variables',
+                    title=' - Correlation Matrix Heatmap of Key Variables',
                     labels=dict(color="Correlation"))
 
     fig.update_layout(xaxis_showgrid=False,
@@ -114,18 +109,16 @@ if continuous_cols:
     st.plotly_chart(fig, use_container_width=True)
 
     # Interpretation box
-    st.markdown("Interpretation")
+    st.subheader("Interpretation")
     st.markdown("""
     1. Darker colors indicate stronger correlations (positive or negative) between variables.
     2. Variables that move together, like poorer sleep and higher trait anxiety, are easily identified.
     3. This helps guide which factors to include in deeper analyses or regression models.
     """)
 
-# -----------------------------------------------------------
-# Step 4: Chronotype (rMEQ Score) by Sleep Quality Category
-# -----------------------------------------------------------
+
 # --- Create the interactive violin plot ---
-st.subheader("1. Chronotype (rMEQ Score) by Sleep Quality Category (Interactive)")
+st.subheader("2.3. Chronotype (rMEQ Score) by Sleep Quality Category (Interactive)")
 
 # Ensure 'Chronotype' column exists
 if 'Chronotype' not in df.columns:
@@ -146,7 +139,7 @@ fig = px.scatter(
     y='Trait_Anxiety',
     facet_col='Chronotype',
     trendline="ols",  # Add regression line
-    title='Sleep Quality vs Trait Anxiety by Chronotype',
+    title=' - Sleep Quality vs Trait Anxiety by Chronotype',
     labels={'psqi_2_groups': 'PSQI (Sleep Quality)', 'Trait_Anxiety': 'Trait Anxiety'}
 )
 
