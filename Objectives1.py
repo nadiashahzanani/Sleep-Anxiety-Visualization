@@ -80,7 +80,7 @@ about half reported fairly or very bad sleep.
 
 
 # --- Interactive Plotly Histogram with Legend ---
-st.title("2. Trait Anxiety by Year of Study")
+st.subheader("2. Trait Anxiety by Year of Study")
 
 # Create Plotly boxplot
 fig = px.box(
