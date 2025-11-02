@@ -3,36 +3,43 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-st.title("Objective 3 — Preferred Start Time & Correlation Matrix")
+st.title("Objective 3 — Preferred Start Time by Chronotype")
 
 # Load dataset
 url = "https://raw.githubusercontent.com/nadiashahzanani/Sleep-Anxiety-Visualization/refs/heads/main/Time_to_think_Norburyy.csv"
 df = pd.read_csv(url)
 
-# Fixed column names (adjust as per your dataset)
-psqi_col = "PSQI_Score" if "PSQI_Score" in df.columns else df.columns[8]
-anx_col = "Trait_Anxiety" if "Trait_Anxiety" in df.columns else df.columns[6]
-chrono_col = "MEQ" if "MEQ" in df.columns else df.columns[5]
-sleep_cat_col = "sleep_category" if "sleep_category" in df.columns else df.columns[9]
-start_col = "Start_time_code" if "Start_time_code" in df.columns else df.columns[10]
+# Ensure 'Chronotype' column exists
+if 'Chronotype' not in df.columns:
+    # Categorize MEQ scores into Chronotypes (adjust thresholds as needed)
+    def categorize_meq(score):
+        if score >= 60:
+            return 'Morning Type'
+        elif score >= 40:
+            return 'Intermediate Type'
+        else:
+            return 'Evening Type'
+    df['Chronotype'] = df['MEQ'].apply(categorize_meq)
 
-# --- Bar Chart: Preferred Start Time by Sleep Category ---
-st.subheader("Preferred University Start Time by Sleep Category")
+# Create interactive violin plot with Plotly
+fig = px.violin(
+    df,
+    x='Chronotype',
+    y='Start_time_code',  # Replace with your column for preferred start time
+    box=True,  # adds boxplot inside violin
+    points='all',  # show all individual data points
+    title='Preferred Start Time by Chronotype',
+    labels={'Chronotype': 'Chronotype', 'Start_time_code': 'Preferred Start Time'}
+)
 
-# ✅ Match Google Colab’s output (remove warning)
-fig, ax = plt.subplots(figsize=(7,4))
-sns.countplot(x=start_col, hue=sleep_cat_col, data=df, palette='muted', ax=ax)
-ax.set_title("Preferred University Start Time by Sleep Category")
-ax.set_xlabel("Preferred Start Time Code")
-ax.set_ylabel("Number of Students")
-ax.legend(title="Sleep Category")
-st.pyplot(fig)
+# Display plot in Streamlit
+st.plotly_chart(fig, use_container_width=True)
 
+# Add interpretation
+st.markdown("Interpretation")
 st.markdown("""
-*Interpretation:*  
-This chart shows how students’ preferred class start times relate to their sleep category.  
-Students with *poorer sleep quality* often prefer *later start times*, while good sleepers prefer earlier classes.  
-This pattern supports the idea that evening chronotypes align with delayed daily schedules.
+1. This violin plot shows how students with different chronotypes prefer different class start times.  
+2. Evening types generally prefer starting later than morning types, and their preferences vary more widely.
 """)
 
 
