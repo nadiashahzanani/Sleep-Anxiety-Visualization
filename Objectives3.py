@@ -17,6 +17,23 @@ chronotype_counts = df['Chronotype'].value_counts() if 'Chronotype' in df.column
 earliest_start = df['Start_time_code'].min()
 latest_start = df['Start_time_code'].max()
 
+# Ensure 'Chronotype' column exists
+if 'Chronotype' not in df.columns:
+    # Categorize MEQ scores into Chronotypes
+    def categorize_meq(score):
+        if score >= 60:
+            return 'Morning Type'
+        elif score >= 40:
+            return 'Intermediate Type'
+        else:
+            return 'Evening Type'
+    
+    df['Chronotype'] = df['MEQ'].apply(categorize_meq)
+
+# Now calculate chronotype counts safely
+chronotype_counts = df['Chronotype'].value_counts()
+
+
 # Set the title for the Streamlit app
 st.title("Start Time Preferences & Chronotype")
 
@@ -32,18 +49,6 @@ col4.metric(label="Latest Preferred Start", value=f"{latest_start:.2f} h",
             help="Latest hour preferred by any student")
 
 st.title("1. Distribution of prefereed class start time across chronotypes")
-
-# Ensure 'Chronotype' column exists
-if 'Chronotype' not in df.columns:
-    # Categorize MEQ scores into Chronotypes (adjust thresholds as needed)
-    def categorize_meq(score):
-        if score >= 60:
-            return 'Morning Type'
-        elif score >= 40:
-            return 'Intermediate Type'
-        else:
-            return 'Evening Type'
-    df['Chronotype'] = df['MEQ'].apply(categorize_meq)
 
 # Create interactive violin plot with Plotly
 fig = px.violin(
