@@ -15,52 +15,49 @@ df = pd.read_csv(url)
 # ------------------------------------------------------------
 # Step 1: Create Sleep Category (Good vs Poor)
 # ------------------------------------------------------------
-if 'psqi_2_groups' in df.columns:
-    df['sleep_category'] = np.where(df['psqi_2_groups'] <= 5, 'Good Sleep', 'Poor Sleep')
-else:
-    st.error("⚠ Column 'psqi_2_groups' not found in the dataset. Please check CSV structure.")
-    st.stop()
 
+# --- Ensure 'Chronotype' column exists ---
+if 'Chronotype' not in df.columns:
+    # Example thresholds for MEQ scores
+    def categorize_meq(score):
+        if score >= 60:
+            return 'Morning Type
+        elif score >= 40:
+            return 'Intermediate Type'
+        else:
+            return 'Evening Type'
+    df['Chronotype'] = df['MEQ'].apply(categorize_meq)
 
-# --- Interactive Box Plot using Plotly ---
-st.subheader("Trait Anxiety by Sleep Quality Category")
+# --- Fit OLS regression ---
+X = sm.add_constant(df['psqi_2_groups'])
+y = df['Trait_Anxiety']
+model = sm.OLS(y, X).fit()
+r_squared = model.rsquared
+p_value = model.pvalues[1]  # p-value for 'psqi_2_groups'
 
-fig = px.box(
+# --- Create Plotly scatter plot with regression line ---
+fig = px.scatter(
     df,
-    x='sleep_category',
+    x='psqi_2_groups',
     y='Trait_Anxiety',
-    color='sleep_category',
-    title='Trait Anxiety by Sleep Quality Category',
-    labels={
-        'sleep_category': 'Sleep Category',
-        'Trait_Anxiety': 'Trait Anxiety Score'
-    },
-    hover_data=['Trait_Anxiety'],  # show details on hover
-    color_discrete_sequence=px.colors.qualitative.Set2,
-    points='all'  # show individual data points for transparency
+    color='Chronotype',
+    trendline="ols",  # adds regression line automatically
+    title=f"Sleep Quality vs Trait Anxiety (R² = {r_squared:.2f}, p = {p_value:.4f})",
+    labels={'psqi_2_groups': 'PSQI (Sleep Quality)', 'Trait_Anxiety': 'Trait Anxiety'}
 )
 
-# --- Customize layout for a cleaner look ---
-fig.update_layout(
-    yaxis_title="Trait Anxiety Score",
-    xaxis_title="Sleep Category",
-    plot_bgcolor="rgba(0,0,0,0)",
-    paper_bgcolor="rgba(0,0,0,0)",
-    title_font=dict(size=18),
-    showlegend=False
-)
-
-# --- Display interactive chart in Streamlit ---
+# --- Display the Plotly chart in Streamlit ---
 st.plotly_chart(fig, use_container_width=True)
 
-# --- Interpretation ---
-st.markdown("### **Interpretation:**")
+# --- Optional Interpretation ---
+st.markdown("Interpretation")
 st.markdown("""
-1. Students with **good sleep** tend to have moderate anxiety levels (around 45–50).  
-2. Some good sleepers have **low anxiety** (25–30), while a few show **higher anxiety** (around 70).  
-3. Students with **poor sleep** generally show a higher spread and slightly higher average anxiety.  
-4. The wider box height indicates **greater variability** in anxiety among those with good sleep.
-""")
+1. This scatter plot shows how sleep quality relates to trait anxiety, with colors representing different chronotypes.  
+2. As sleep quality worsens, anxiety generally increases, and the regression line confirms this upward trend.  
+3. Individual points reveal variation among chronotypes, indicating that chronotype may influence the relationship's strength or pattern.
+    """)
+
+
 
 # --- Statistical Test (t-test) ---
 good = df[df['sleep_category']=='Good Sleep']['Trait_Anxiety']
