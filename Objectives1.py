@@ -10,106 +10,93 @@ st.subheader("1. Gender Representation by Year Level")
 url = "https://raw.githubusercontent.com/nadiashahzanani/Sleep-Anxiety-Visualization/refs/heads/main/Time_to_think_Norburyy.csv"
 df = pd.read_csv(url)
 
-# --- Create interactive Plotly bar chart (interactive legend built-in) ---
-fig = px.bar(
+# --- 1. Gender Distribution by Year of Study ---
+fig_gender = px.bar(
     df,
     x='Year_of_Study',
     color='Sex',
     barmode='group',
     title='Gender Distribution by Year of Study',
-    labels={'Year_of_Study': 'Year of Study', 'Sex': 'Sex'},
+    labels={'Year_of_Study': 'Year of Study', 'Sex': 'Gender'}
 )
 
-# --- Customize layout ---
-fig.update_layout(
+fig_gender.update_layout(
     yaxis_title="Number of Students",
     xaxis_title="Year of Study",
     title_x=0.3,
-    legend_title="Click to Hide/Show Sex Group",
+    legend_title="Click to Hide/Show Gender",
     plot_bgcolor='rgba(0,0,0,0)',
     hovermode="x unified"
 )
 
-# --- Display chart in Streamlit ---
-st.plotly_chart(fig, use_container_width=True)
+st.plotly_chart(fig_gender, use_container_width=True)
 
-# --- Interpretation section ---
-st.subheader("Interpretation:")
-
+st.markdown("**Interpretation:**")
 st.markdown("""
-1. This chart shows the gender distribution across different years of study.
-2. It reveals that both male and female students are present in every year, with slightly more students in the earlier years.
+- This chart shows the gender distribution across different years of study.
+- Both male and female students are present in every year, with slightly more students in the earlier years.
 """)
 
-
-# --- Interactive Plotly Histogram with Legend ---
+# --- 2. Sleep Quality Distribution (Histogram) ---
 st.subheader("2. Basic Sleep Quality Distribution")
 
-fig = px.histogram(
+fig_sleep = px.histogram(
     df,
     x='psqi_2_groups',
-    color='psqi_2_groups',  # adds interactive legend by grouping color
+    color='psqi_2_groups',
     nbins=10,
     color_discrete_sequence=px.colors.qualitative.Set2,
-    title="Distribution of Sleep Quality (PSQI)",
+    title="Distribution of Sleep Quality (PSQI)"
 )
 
-fig.update_layout(
+fig_sleep.update_layout(
     xaxis_title="PSQI Score (Higher = Poorer Sleep)",
     yaxis_title="Number of Students",
     bargap=0.1,
     template="simple_white",
-    legend_title_text="PSQI Group",
+    legend_title_text="PSQI Group"
 )
+fig_sleep.update_traces(opacity=0.8)
 
-# --- Enable interactive legend behavior ---
-# (Plotly does this by default — users can click legend items to hide/show)
-fig.update_traces(opacity=0.8)
+st.plotly_chart(fig_sleep, use_container_width=True)
 
-# --- Display chart in Streamlit ---
-st.plotly_chart(fig, use_container_width=True)
-
-# --- Interpretation ---
-st.markdown("### *Interpretation:*")
+st.markdown("**Interpretation:**")
 st.markdown("""
-1. Most students are grouped into two main sleep quality categories which is good sleepers (PSQI = 1) and poor sleepers (PSQI = 2).
-2. The interactive legend allows users to easily explore how each group contributes to the overall sleep pattern.
+- Most students fall into two main sleep quality categories: good sleepers (PSQI = 1) and poor sleepers (PSQI = 2).  
+- The interactive legend allows exploring each group's contribution to the overall pattern.
 """)
 
-# --- Interactive Box Plot with Legend Control ---
-st.subheader("3. Sleep Quality (PSQI) by Year of Study (Interactive Legend)")
+# --- 3. Sleep Quality by Year of Study (Box Plot) ---
+st.subheader("3. Sleep Quality (PSQI) by Year of Study")
 
-fig = px.box(
+fig_box = px.box(
     df,
     x='Year_of_Study',
     y='psqi_2_groups',
     color='Sex',
+    points='all',  # show individual points
+    color_discrete_sequence=px.colors.qualitative.Set2,
     title='Sleep Quality (PSQI) by Year of Study',
     labels={
         'Year_of_Study': 'Year of Study',
         'psqi_2_groups': 'PSQI Score (1 = Good, 2 = Poor)',
         'Sex': 'Gender'
-    },
-    points='all',  # show individual data points
-    color_discrete_sequence=px.colors.qualitative.Set2
+    }
 )
 
-# --- Improve Layout & Interactivity ---
-fig.update_layout(
+fig_box.update_layout(
     yaxis_title="PSQI Score (1 = Good, 2 = Poor)",
     xaxis_title="Year of Study",
     plot_bgcolor="rgba(0,0,0,0)",
     paper_bgcolor="rgba(0,0,0,0)",
     title_font=dict(size=18),
-    legend_title_text="Click to Filter by Gender",  # encourage legend interaction
+    legend_title_text="Click to Filter by Gender"
 )
 
-# --- Display interactive chart in Streamlit ---
-st.plotly_chart(fig, use_container_width=True)
+st.plotly_chart(fig_box, use_container_width=True)
 
-# --- Interpretation ---
-st.markdown("### *Interpretation:*")
+st.markdown("**Interpretation:**")
 st.markdown("""
-1. This chart shows that students in Year 1 and 2 have a mix of good and poor sleepers, while most Year 3 students tend to sleep better. 
-2. Overall, sleep quality differences across years are small but still noticeable.
+- Year 1 and 2 students have a mix of good and poor sleepers, while most Year 3 students tend to sleep better.  
+- Sleep quality differences across years are small but noticeable.
 """)
