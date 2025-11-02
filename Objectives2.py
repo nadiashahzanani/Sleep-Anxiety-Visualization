@@ -14,6 +14,9 @@ st.title("Objectives 2 - Explore the Relationship Sleep Quality, Anxiety Levels 
 url = "https://raw.githubusercontent.com/nadiashahzanani/Sleep-Anxiety-Visualization/refs/heads/main/Time_to_think_Norburyy.csv"
 df = pd.read_csv(url)
 
+# Set the title for the Streamlit app
+st.subheader("Student Sleep Quality, Anxiety Overview")
+
 # --- Set key columns ---
 sleep_col = 'psqi_2_groups'     # Sleep quality
 anxiety_col = 'Trait_Anxiety'   # Trait anxiety
