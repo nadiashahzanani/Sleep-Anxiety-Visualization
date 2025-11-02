@@ -65,7 +65,7 @@ st.markdown("""
 # ------------------------------------------------------------
 # Select continuous columns for correlation
 continuous_cols = ['psqi_2_groups', 'Trait_Anxiety', 'Avg_Weekly_Sleep_Duration',
-                       'Avg_Sleep_Working_days', 'Avg_sleep_free_days', 'Daytime_Dozing', 'Age', 'MEQ']
+                       'Avg_Sleep_Working_days', 'Avg_sleep_free_days', 'Daytime_Dozing', 'Age', 'MEQ', 'Sleep_category']
 
 # Ensure selected columns exist in the DataFrame
 continuous_cols = [col for col in continuous_cols if col in df.columns]
@@ -84,7 +84,7 @@ if continuous_cols:
     fig.update_layout(xaxis_showgrid=False,
                     yaxis_showgrid=False,
                     xaxis_nticks=len(continuous_cols),
-                      yaxis_nticks=len(continuous_cols))
+                      axis_nticks=len(continuous_cols))
 
     # Display the heatmap in Streamlit
     st.plotly_chart(fig, use_container_width=True)
@@ -135,7 +135,7 @@ st.markdown("💡 **Tip:** Hover over the violins or data points to see exact rM
 st.plotly_chart(fig, use_container_width=True)
 
 # --- Interpretation ---
-st.markdown("### **Interpretation:**")
+st.markdown("**Interpretation:**")
 st.markdown("""
 1. This plot shows how being a *morning* or *evening* type (rMEQ score) relates to sleep quality.  
 2. Among students with **good sleep**, most have mid-range rMEQ scores — meaning they’re neither extreme morning nor evening types.  
