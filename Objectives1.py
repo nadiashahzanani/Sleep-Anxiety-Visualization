@@ -4,6 +4,8 @@ import plotly.figure_factory as ff
 import plotly.graph_objects as go
 import numpy as np
 import pandas as pd
+import plotly.express as px
+
 
 # --- Page title ---
 st.subheader("1. Gender Representation by Year Level")
