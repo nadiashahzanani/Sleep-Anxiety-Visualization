@@ -112,7 +112,7 @@ st.write("""
 # --- 3. Sleep Quality by Year of Study (Box Plot) ---
 st.subheader("3. Sleep Quality Distribution by Sex")
 
- # Categorize psqi_2_groups into descriptive categories
+# Categorize psqi_2_groups into descriptive categories
 def categorize_psqi(score):
     if score == 1:
         return 'Good Sleep'
@@ -136,13 +136,11 @@ fig = px.bar(
 fig.update_layout(yaxis_title="Number of Students")
     
 # Display in Streamlit
-    st.plotly_chart(fig, use_container_width=True)
+st.plotly_chart(fig, use_container_width=True)
 
 # Add interpretation
-    st.subheader("Interpretation")
-    st.markdown("""
-    1. This grouped bar chart compares how sleep quality levels differ between male and female students.  
-    2. It shows which gender reports better or poorer sleep more often, helping us see if one group tends to struggle more with sleep quality.
-    """)
-else:
-    st.info("Please upload a CSV file to visualize the data.")
+st.subheader("Interpretation")
+st.markdown("""
+1. This grouped bar chart compares how sleep quality levels differ between male and female students.  
+2. It shows which gender reports better or poorer sleep more often, helping us see if one group tends to struggle more with sleep quality.
+""")
