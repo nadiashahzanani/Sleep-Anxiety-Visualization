@@ -35,7 +35,11 @@ col1, col2, col3, col4 = st.columns(4)
 col1.metric("Average Sleep Quality", f"{mean_sleep:.2f}", delta=f"Max: {max_sleep}", help="Higher = poorer sleep")
 col2.metric("Average Trait Anxiety", f"{mean_anxiety:.2f}", delta=f"Max: {max_anxiety}", help="STAI Trait Anxiety")
 col3.metric("Sleep-Anxiety Correlation", f"{corr:.2f}", delta=f"p = {p_val:.3g}", help="Positive = poor sleep linked to higher anxiety")
-col4.metric("Sample Size", f"{len(df)}", help="Number of students") included")
+col4.metric(
+    label="Sample Size",
+    value=f"{len(df)}",
+    help="Number of students"
+)
 
 
 # ------------------------------------------------------------
