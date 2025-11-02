@@ -73,43 +73,41 @@ st.markdown("""
 if 'Start_time_code' in df.columns:
     st.subheader("Trait Anxiety vs Sleep Quality by Preferred Start Time")
     
-    # Create the figure
-    fig, ax = plt.subplots(figsize=(7,5))
-    sns.scatterplot(
-        x='psqi_2_groups', 
-        y='Trait_Anxiety', 
-        hue='Start_time_code', 
-        data=df, 
-        palette='Spectral',
-        ax=ax
+# --- Calculate mean preferred start time and mean sleep quality by Year of Study ---
+mean_start_time_quality = df.groupby('Year_of_Study').agg(
+    Mean_Start_Time_Code=('Start_time_code', 'mean'),
+    Mean_Sleep_Quality=('psqi_2_groups', 'mean')
+).reset_index()
+
+# --- Create Plotly bar chart ---
+fig = px.bar(
+    mean_start_time_quality,
+    x='Year_of_Study',
+    y='Mean_Start_Time_Code',
+    title='Mean Preferred Start Time by Year of Study',
+    labels={'Year_of_Study': 'Year of Study', 'Mean_Start_Time_Code': 'Mean Preferred Start Time Code'},
+    text='Mean_Start_Time_Code',  # optional: show bar values
+    color='Mean_Start_Time_Code',  # optional: color by height
+    color_continuous_scale='Blues'
+)
+
+# Add annotations for mean sleep quality
+for index, row in mean_start_time_quality.iterrows():
+    fig.add_annotation(
+        x=row['Year_of_Study'],
+        y=row['Mean_Start_Time_Code'],
+        text=f"Sleep Quality: {row['Mean_Sleep_Quality']:.2f}",
+        showarrow=False,
+        yshift=10
     )
-    ax.set_xlabel("Sleep Quality (PSQI)")
-    ax.set_ylabel("Trait Anxiety")
-    ax.set_title("Trait Anxiety vs Sleep Quality by Preferred Start Time")
-    
-    # Show the plot in Streamlit
-    st.pyplot(fig)
 
-# --- Correlation Heatmap ---
-st.subheader("Correlation Heatmap")
-# Use the exact 3 columns from your Colab
-selected_cols = ['psqi_2_groups', 'Trait_Anxiety', 'MEQ']
-
-# Compute correlation matrix
-corr = df[selected_cols].corr()
-
-# Plot same style as in Colab
-fig, ax = plt.subplots(figsize=(7,5))
-sns.heatmap(corr, annot=True, cmap='vlag', vmin=-1, vmax=1, ax=ax)
-ax.set_title("Correlation Heatmap of Key Variables")
-
-# Show in Streamlit
-st.pyplot(fig)
-
-st.markdown("""
-*Interpretation:*  
-This heatmap mirrors the Google Colab visualization.  
-It shows correlation values among *Sleep Quality (PSQI), **Trait Anxiety, and **Chronotype (MEQ)*.  
-Positive values (red) indicate that higher PSQI relates to higher anxiety,  
-while negative values (blue) show inverse relationships.
-""")
+# --- Display in Streamlit ---
+st.title("Preferred Start Times by Year of Study")
+st.markdown(
+    """
+    This chart shows how students in each year prefer different class start times 
+    and how their average sleep quality compares. 
+    Years that prefer later starts but report poorer sleep may benefit from adjusted schedules.
+    """
+)
+st.plotly_chart(fig, use_container_width=True)
