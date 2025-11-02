@@ -4,20 +4,27 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import plotly.express as px
 
-st.title("Objective 3 — Preferred Start Time by Chronotype")
+st.title("Objective 3 — Student Sleep Patterns and Preferred Class Time")
 
 # Load dataset
 url = "https://raw.githubusercontent.com/nadiashahzanani/Sleep-Anxiety-Visualization/refs/heads/main/Time_to_think_Norburyy.csv"
 df = pd.read_csv(url)
 
 # Set the title for the Streamlit app
-st.title("Arts Faculty Student Data")
+st.title("Start Time Preferences & Chronotype")
+
 col1, col2, col3, col4 = st.columns(4)
 
-col1.metric(label="PLO 2", value=f"3.3", help="PLO 2: Cognitive Skill", border=True)
-col2.metric(label="PLO 3", value=f"3.5", help="PLO 3: Digital Skill", border=True)
-col3.metric(label="PLO 4", value=f"4.0", help="PLO 4: Interpersonal Skill", border=True)
-col4.metric(label="PLO 5", value=f"4.3", help="PLO 5: Communication Skill", border=True)
+col1.metric(label="Avg Preferred Start Time", value=f"{mean_pref_start:.2f} h",
+            help="Average hour students prefer to start classes")
+col2.metric(label="Avg Sleep Quality", value=f"{mean_sleep_quality:.2f}",
+            help="Higher value indicates poorer sleep quality")
+col3.metric(label="Earliest Preferred Start", value=f"{earliest_start:.2f} h",
+            help="Earliest hour preferred by any student")
+col4.metric(label="Latest Preferred Start", value=f"{latest_start:.2f} h",
+            help="Latest hour preferred by any student")
+
+st.title("1. Distribution of prefereed class start time across chronotypes")
 
 # Ensure 'Chronotype' column exists
 if 'Chronotype' not in df.columns:
@@ -53,7 +60,7 @@ st.markdown("""
 """)
 
 
-st.title("2. Preferred Start Time vs Sleep Quality")
+st.title("2. How sleep quality varies with preferred start times")
 
 # Create the Plotly density heatmap
 fig = px.density_heatmap(
@@ -72,7 +79,7 @@ fig = px.density_heatmap(
 st.plotly_chart(fig, use_container_width=True)
 
 # Interpretation
-st.subheader("Interpretation")
+st.markdown("Interpretation")
 st.markdown("""
 1. This heatmap shows where most students fall based on their preferred class start time and sleep quality.  
 2. Darker areas toward the top-right indicate many poor sleepers prefer later class times, suggesting that starting classes later might help improve their sleep.
@@ -80,7 +87,7 @@ st.markdown("""
 
 # --- Scatter Plot: Anxiety vs Sleep Quality (Colored by Start Time) ---
 if 'Start_time_code' in df.columns:
-    st.subheader("Trait Anxiety vs Sleep Quality by Preferred Start Time")
+    st.title("3. Average gap between preferred and actual start times by year (with sleep quality)")
     
 # --- Calculate mean preferred start time and mean sleep quality by Year of Study ---
 mean_start_time_quality = df.groupby('Year_of_Study').agg(
