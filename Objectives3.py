@@ -44,6 +44,31 @@ st.markdown("""
 """)
 
 
+st.title("2. Preferred Start Time vs Sleep Quality")
+
+# Create the Plotly density heatmap
+fig = px.density_heatmap(
+    df,
+    x='Start_time_code',
+    y='psqi_2_groups',
+    title='Preferred Start Time vs Sleep Quality',
+    labels={
+        'Start_time_code': 'Preferred Start Time Code',
+        'psqi_2_groups': 'PSQI (Sleep Quality)'
+    },
+    color_continuous_scale='Blues'
+)
+
+# Display the figure in Streamlit
+st.plotly_chart(fig, use_container_width=True)
+
+# Interpretation
+st.subheader("Interpretation")
+st.markdown("""
+1. This heatmap shows where most students fall based on their preferred class start time and sleep quality.  
+2. Darker areas toward the top-right indicate many poor sleepers prefer later class times, suggesting that starting classes later might help improve their sleep.
+""")
+
 # --- Scatter Plot: Anxiety vs Sleep Quality (Colored by Start Time) ---
 if 'Start_time_code' in df.columns:
     st.subheader("Trait Anxiety vs Sleep Quality by Preferred Start Time")
