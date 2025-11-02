@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import plotly.express as px
 
-st.title("Objective 3 — Student Sleep Patterns and Preferred Class Time")
+st.title("Objectives 3 — Start-Time Preferences, Chronotype and Sleep Quality in Policy Implications")
 
 # Load dataset
 url = "https://raw.githubusercontent.com/nadiashahzanani/Sleep-Anxiety-Visualization/refs/heads/main/Time_to_think_Norburyy.csv"
@@ -35,7 +35,7 @@ latest_start = df['Start_time_code'].max()
 
 
 # Set the title for the Streamlit app
-st.title("Start Time Preferences & Chronotype")
+st.subheader("Start Time Preferences & Chronotype")
 
 col1, col2, col3, col4 = st.columns(4)
 
@@ -48,7 +48,7 @@ col3.metric(label="Earliest Preferred Start", value=f"{earliest_start:.2f} h",
 col4.metric(label="Latest Preferred Start", value=f"{latest_start:.2f} h",
             help="Latest hour preferred by any student")
 
-st.title("1. Distribution of prefereed class start time across chronotypes")
+st.subheader("3.1. Distribution of Prefereed Class Start Time Across Chronotypes")
 
 # Create interactive violin plot with Plotly
 fig = px.violin(
@@ -57,7 +57,7 @@ fig = px.violin(
     y='Start_time_code',  # Replace with your column for preferred start time
     box=True,  # adds boxplot inside violin
     points='all',  # show all individual data points
-    title='Preferred Start Time by Chronotype',
+    title='- Preferred Start Time by Chronotype',
     labels={'Chronotype': 'Chronotype', 'Start_time_code': 'Preferred Start Time'}
 )
 
@@ -72,7 +72,7 @@ st.markdown("""
 """)
 
 
-st.title("2. How sleep quality varies with preferred start times")
+st.title("3.2. How Sleep Quality Varies With Preferred Start Times")
 
 # Create the Plotly density heatmap
 fig = px.density_heatmap(
@@ -97,9 +97,7 @@ st.markdown("""
 2. Darker areas toward the top-right indicate many poor sleepers prefer later class times, suggesting that starting classes later might help improve their sleep.
 """)
 
-# --- Scatter Plot: Anxiety vs Sleep Quality (Colored by Start Time) ---
-if 'Start_time_code' in df.columns:
-    st.title("3. Average gap between preferred and actual start times by year (with sleep quality)")
+st.title("3.3. Average gap between preferred and actual start times by year (with sleep quality)")
     
 # --- Calculate mean preferred start time and mean sleep quality by Year of Study ---
 mean_start_time_quality = df.groupby('Year_of_Study').agg(
