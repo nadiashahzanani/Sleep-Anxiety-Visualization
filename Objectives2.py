@@ -60,71 +60,38 @@ st.markdown("""
     """)
 
 
-
-# --- Statistical Test (t-test) ---
-good = df[df['sleep_category']=='Good Sleep']['Trait_Anxiety']
-poor = df[df['sleep_category']=='Poor Sleep']['Trait_Anxiety']
-t, p = stats.ttest_ind(good, poor)
-print(f"T-test result: t = {t:.3f}, p = {p:.4f}")
-
 # ------------------------------------------------------------
-# Step 3: Daytime Dozing Frequency by Sleep Quality Category
+# Step 2: Daytime Dozing Frequency by Sleep Quality Category
 # ------------------------------------------------------------
-# --- Check if 'Daytime_Dozing' column exists ---
-if 'Daytime_Dozing' in df.columns and 'sleep_category' in df.columns:
+# Ensure selected columns exist in the DataFrame
+continuous_cols = [col for col in continuous_cols if col in df.columns]
 
-    # --- Calculate normalized counts (percentage) ---
-    doze_counts = (
-        df.groupby('sleep_category')['Daytime_Dozing']
-        .value_counts(normalize=True)
-        .mul(100)
-        .reset_index(name='Percentage')
-    )
+if continuous_cols:
+    # Calculate the Pearson correlation matrix
+    corr_matrix = df[continuous_cols].corr(method='pearson')
+    
+    # Create an interactive heatmap with Plotly
+    fig = px.imshow(corr_matrix,
+                    text_auto=True,          # Annotate with correlation values
+                    aspect="auto",
+                    title='Correlation Matrix Heatmap of Key Variables',
+                    labels=dict(color="Correlation"))
 
-    # --- Create interactive stacked bar chart ---
-    fig = px.bar(
-        doze_counts,
-        x='sleep_category',
-        y='Percentage',
-        color='Daytime_Dozing',
-        title='Daytime Dozing Frequency by Sleep Quality Category',
-        labels={
-            'sleep_category': 'Sleep Category',
-            'Daytime_Dozing': 'Dozing Frequency',
-            'Percentage': 'Percentage (%)'
-        },
-        category_orders={
-            "Daytime_Dozing": sorted(df['Daytime_Dozing'].dropna().unique())
-        },
-        text='Percentage'
-    )
+    fig.update_layout(xaxis_showgrid=False,
+                    yaxis_showgrid=False,
+                    xaxis_nticks=len(continuous_cols),
+                      yaxis_nticks=len(continuous_cols))
 
-    # --- Enhance layout ---
-    fig.update_traces(texttemplate='%{text:.1f}%', textposition='inside')
-    fig.update_layout(
-        barmode='stack',
-        yaxis_title="Percentage (%)",
-        xaxis_title="Sleep Category",
-        plot_bgcolor="rgba(0,0,0,0)",
-        paper_bgcolor="rgba(0,0,0,0)",
-        legend_title_text="Daytime Dozing Frequency",
-        title_font=dict(size=18)
-    )
-
-    # --- Display interactive chart in Streamlit ---
+    # Display the heatmap in Streamlit
     st.plotly_chart(fig, use_container_width=True)
 
-    # --- Interpretation Section ---
-    st.markdown("### **Interpretation:**")
+    # Interpretation box
+    st.markdoen("Interpretation")
     st.markdown("""
-    1. The stacked bar chart shows the **percentage of students in each sleep quality category** (e.g., Good vs Poor sleepers) based on their **daytime dozing frequency**.  
-    2. The color segments represent how often students doze during the day — lighter colors indicate less frequent dozing, while darker colors show more frequent dozing.  
-    3. Students with **good sleep quality** generally show less variation in daytime dozing, suggesting they are more alert.  
-    4. Poor sleepers, if present, may show higher daytime dozing percentages, reflecting lower alertness levels.
+    1. Darker colors indicate stronger correlations (positive or negative) between variables.
+    2. Variables that move together, like poorer sleep and higher trait anxiety, are easily identified.
+    3. This helps guide which factors to include in deeper analyses or regression models.
     """)
-
-else:
-    st.error("⚠️ Required column 'Daytime_Dozing' or 'sleep_category' not found in dataset.")
 
 # -----------------------------------------------------------
 # Step 4: Chronotype (rMEQ Score) by Sleep Quality Category
