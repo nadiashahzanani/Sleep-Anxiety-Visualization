@@ -14,10 +14,6 @@ st.title("Objectives 2 - Explore the relationship sleep quality, anxiety levels 
 url = "https://raw.githubusercontent.com/nadiashahzanani/Sleep-Anxiety-Visualization/refs/heads/main/Time_to_think_Norburyy.csv"
 df = pd.read_csv(url)
 
-
-# --- Check column names ---
-st.write("Columns in dataset:", df.columns.tolist())
-
 # --- Set key columns ---
 sleep_col = 'psqi_2_groups'     # Sleep quality
 anxiety_col = 'Trait_Anxiety'   # Trait anxiety
