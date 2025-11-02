@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import plotly.express as px
 
-st.title("Objectives 3 — Start-Time Preferences, Chronotype and Sleep Quality in Policy Implications")
+st.title("Objectives 3 - Start-Time Preferences, Chronotype and Sleep Quality in Policy Implications")
 
 # Load dataset
 url = "https://raw.githubusercontent.com/nadiashahzanani/Sleep-Anxiety-Visualization/refs/heads/main/Time_to_think_Norburyy.csv"
