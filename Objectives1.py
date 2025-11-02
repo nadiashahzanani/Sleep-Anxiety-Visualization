@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 
 # --- Page title ---
-st.subheader("1. Sleep and Anxiety Levels Across Different Groups")
+st.subheader("Objectives 1: Sleep and Anxiety Levels Across Different Groups")
 
 # --- Load dataset ---
 url = "https://raw.githubusercontent.com/nadiashahzanani/Sleep-Anxiety-Visualization/refs/heads/main/Time_to_think_Norburyy.csv"
@@ -57,7 +57,7 @@ fig.add_annotation(
 
 # Layout updates
 fig.update_layout(
-    title_text="Distribution of Sleep Quality (PSQI) with Mean and Median",
+    title_text="1. Distribution of Sleep Quality (PSQI) with Mean and Median",
     xaxis_title="PSQI Score (Higher = Poorer Sleep)",
     yaxis_title="Density",
     template="plotly_white",
@@ -72,43 +72,32 @@ st.plotly_chart(fig, use_container_width=True)
 st.markdown("### Interpretation")
 st.write("""
 This plot shows how students’ sleep quality scores are spread out. 
-Most students appear to have poorer sleep, with many scores clustering toward the higher (worse) end — 
-about half reported fairly or very bad sleep.
+Most students appear to have poorer sleep, with many scores clustering toward the higher (worse) end about half reported fairly or very bad sleep.
 """)
 
 
-# --- Interactive Plotly Histogram with Legend ---
-st.subheader("2. Basic Sleep Quality Distribution")
+# --- Interactive Plotly Boxplot with Legend ---
+st.subheader("2. Trait Anxiety by Year of Study")
 
-fig = px.histogram(
+# Create Plotly boxplot
+fig = px.box(
     df,
-    x='psqi_2_groups',
-    color='psqi_2_groups',  # adds interactive legend by grouping color
-    nbins=10,
-    color_discrete_sequence=px.colors.qualitative.Set2,
-    title="Distribution of Sleep Quality (PSQI)",
+    x='Year_of_Study',
+    y='Trait_Anxiety',
+    points='all',  # Show all points
+    title='Trait Anxiety by Year of Study',
+    labels={'Year_of_Study': 'Year of Study', 'Trait_Anxiety': 'Trait Anxiety Score'},
+    color='Year_of_Study'  # Optional: color by year for better distinction
 )
 
-fig.update_layout(
-    xaxis_title="PSQI Score (Higher = Poorer Sleep)",
-    yaxis_title="Number of Students",
-    bargap=0.1,
-    template="simple_white",
-    legend_title_text="PSQI Group",
-)
-
-# --- Enable interactive legend behavior ---
-# (Plotly does this by default — users can click legend items to hide/show)
-fig.update_traces(opacity=0.8)
-
-# --- Display chart in Streamlit ---
+# Display in Streamlit
 st.plotly_chart(fig, use_container_width=True)
 
 # --- Interpretation ---
-st.markdown("### **Interpretation:**")
-st.markdown("""
-1. Most students are grouped into two main sleep quality categories which is good sleepers (PSQI = 1) and poor sleepers (PSQI = 2).
-2. The interactive legend allows users to easily explore how each group contributes to the overall sleep pattern.
+st.subheader("Interpretation")
+st.write("""
+1. This boxplot shows how students’ anxiety levels differ across their years of study.  
+2. Overall, first-year students tend to have slightly higher and more varied anxiety scores, suggesting they may feel more stress as they adjust to university life.
 """)
 
 # --- Interactive Box Plot with Legend Control ---
