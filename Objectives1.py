@@ -113,17 +113,17 @@ st.write("""
 st.subheader("3. Sleep Quality Distribution by Sex")
 
  # Categorize psqi_2_groups into descriptive categories
-    def categorize_psqi(score):
-        if score == 1:
-            return 'Good Sleep'
-        elif score == 2:
-            return 'Poor Sleep'
-        else:
-            return 'Other'  # Handle unexpected values
+def categorize_psqi(score):
+    if score == 1:
+        return 'Good Sleep'
+    elif score == 2:
+        return 'Poor Sleep'
+    else:
+        return 'Other'  # Handle unexpected values
 
-    df['Sleep_Quality_Category_Detailed'] = df['psqi_2_groups'].apply(categorize_psqi)
+df['Sleep_Quality_Category_Detailed'] = df['psqi_2_groups'].apply(categorize_psqi)
 
-    # Create grouped bar chart
+# Create grouped bar chart
     fig = px.bar(
         df,
         x='Sex',
