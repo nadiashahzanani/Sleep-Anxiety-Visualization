@@ -65,7 +65,7 @@ fig = px.violin(
 st.plotly_chart(fig, use_container_width=True)
 
 # Add interpretation
-st.markdown("Interpretation")
+st.subheader("Interpretation")
 st.markdown("""
 1. This violin plot shows how students with different chronotypes prefer different class start times.  
 2. Evening types generally prefer starting later than morning types, and their preferences vary more widely.
@@ -91,7 +91,7 @@ fig = px.density_heatmap(
 st.plotly_chart(fig, use_container_width=True)
 
 # Interpretation
-st.markdown("Interpretation")
+st.subheader("Interpretation")
 st.markdown("""
 1. This heatmap shows where most students fall based on their preferred class start time and sleep quality.  
 2. Darker areas toward the top-right indicate many poor sleepers prefer later class times, suggesting that starting classes later might help improve their sleep.
@@ -128,7 +128,7 @@ for index, row in mean_start_time_quality.iterrows():
     )
 
 # --- Interpretation ---
-st.markdown("Interpretation")
+st.subheader("Interpretation")
 st.markdown("""
 1. This chart shows how students in each year prefer different class start times 
     and how their average sleep quality compares. 
