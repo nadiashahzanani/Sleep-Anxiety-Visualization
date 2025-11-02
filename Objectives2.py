@@ -17,21 +17,27 @@ df = pd.read_csv(url)
 # Set the title for the Streamlit app
 st.title("Sleeps and Anxiety Overview")
 
-# --- Calculate key metrics ---
-mean_sleep = df['sleep_score'].mean()
-mean_anxiety = df['trait_anxiety'].mean()
-corr, p_val = stats.pearsonr(df['sleep_score'].dropna(), df['trait_anxiety'].dropna())
+# --- Check column names ---
+st.write("Columns in dataset:", df.columns.tolist())
 
-# Optional: highest sleep score and highest anxiety for context
-max_sleep = df['sleep_score'].max()
-max_anxiety = df['trait_anxiety'].max()
+# --- Set key columns ---
+sleep_col = 'psqi_2_groups'     # Sleep quality
+anxiety_col = 'Trait_Anxiety'   # Trait anxiety
+meq_col = 'MEQ'                  # Morningness-Eveningness Questionnaire
+
+# --- Calculate metrics ---
+mean_sleep = df[sleep_col].mean()
+mean_anxiety = df[anxiety_col].mean()
+corr, p_val = stats.pearsonr(df[sleep_col].dropna(), df[anxiety_col].dropna())
+max_sleep = df[sleep_col].max()
+max_anxiety = df[anxiety_col].max()
 
 # --- Display metrics ---
 col1, col2, col3, col4 = st.columns(4)
-col1.metric(label="Average Sleep Score", value=f"{mean_sleep:.2f}", help="Higher scores = poorer sleep", delta=f"Max: {max_sleep}")
-col2.metric(label="Average Anxiety Score", value=f"{mean_anxiety:.2f}", help="Trait anxiety measured via STAI", delta=f"Max: {max_anxiety}")
-col3.metric(label="Sleep-Anxiety Correlation", value=f"{corr:.2f}", help="Positive = poor sleep linked to higher anxiety", delta=f"p-value: {p_val:.3g}")
-col4.metric(label="Sample Size", value=f"{len(df)}", help="Number of students included")
+col1.metric("Average Sleep Quality", f"{mean_sleep:.2f}", delta=f"Max: {max_sleep}", help="Higher = poorer sleep")
+col2.metric("Average Trait Anxiety", f"{mean_anxiety:.2f}", delta=f"Max: {max_anxiety}", help="STAI Trait Anxiety")
+col3.metric("Sleep-Anxiety Correlation", f"{corr:.2f}", delta=f"p = {p_val:.3g}", help="Positive = poor sleep linked to higher anxiety")
+col4.metric("Sample Size", f"{len(df)}", help="Number of students") included")
 
 
 # ------------------------------------------------------------
