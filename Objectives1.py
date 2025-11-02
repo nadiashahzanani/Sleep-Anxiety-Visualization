@@ -8,7 +8,7 @@ import plotly.express as px
 
 
 # --- Page title ---
-st.title("Objectives 1. Distribution and Group Differences In Sleep Quality and Anxiety")
+st.title("Objectives 1 - Distribution and Group Differences In Sleep Quality and Anxiety")
 
 # --- Load dataset ---
 url = "https://raw.githubusercontent.com/nadiashahzanani/Sleep-Anxiety-Visualization/refs/heads/main/Time_to_think_Norburyy.csv"
