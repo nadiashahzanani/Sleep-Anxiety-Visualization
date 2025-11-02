@@ -101,13 +101,11 @@ for index, row in mean_start_time_quality.iterrows():
         yshift=10
     )
 
-# --- Display in Streamlit ---
-st.title("Preferred Start Times by Year of Study")
-st.markdown(
-    """
-    This chart shows how students in each year prefer different class start times 
+# --- Interpretation ---
+st.markdown("Interpretation")
+st.markdown("""
+1. This chart shows how students in each year prefer different class start times 
     and how their average sleep quality compares. 
-    Years that prefer later starts but report poorer sleep may benefit from adjusted schedules.
-    """
-)
-st.plotly_chart(fig, use_container_width=True)
+2. Years that prefer later starts but report poorer sleep may benefit from adjusted schedules.
+""")
+
