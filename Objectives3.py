@@ -11,18 +11,11 @@ url = "https://raw.githubusercontent.com/nadiashahzanani/Sleep-Anxiety-Visualiza
 df = pd.read_csv(url)
 
 # --- Calculate summary metrics for Objective 3 ---
-# Mean preferred start time overall
-mean_pref_start = df['preferred_start_hour'].mean()
-
-# Mean sleep quality overall
-mean_sleep_quality = df['sleep_score'].mean()
-
-# Count of students by chronotype
-chronotype_counts = df['chronotype'].value_counts()
-
-# Range of start times
-earliest_start = df['preferred_start_hour'].min()
-latest_start = df['preferred_start_hour'].max()
+mean_pref_start = df['Start_time_code'].mean()
+mean_sleep_quality = df['psqi_2_groups'].mean()
+chronotype_counts = df['Chronotype'].value_counts() if 'Chronotype' in df.columns else df['MEQ'].apply(categorize_meq).value_counts()
+earliest_start = df['Start_time_code'].min()
+latest_start = df['Start_time_code'].max()
 
 # Set the title for the Streamlit app
 st.title("Start Time Preferences & Chronotype")
