@@ -10,13 +10,6 @@ st.title("Objective 3 — Student Sleep Patterns and Preferred Class Time")
 url = "https://raw.githubusercontent.com/nadiashahzanani/Sleep-Anxiety-Visualization/refs/heads/main/Time_to_think_Norburyy.csv"
 df = pd.read_csv(url)
 
-# --- Calculate summary metrics for Objective 3 ---
-mean_pref_start = df['Start_time_code'].mean()
-mean_sleep_quality = df['psqi_2_groups'].mean()
-chronotype_counts = df['Chronotype'].value_counts() if 'Chronotype' in df.columns else df['MEQ'].apply(categorize_meq).value_counts()
-earliest_start = df['Start_time_code'].min()
-latest_start = df['Start_time_code'].max()
-
 # Ensure 'Chronotype' column exists
 if 'Chronotype' not in df.columns:
     # Categorize MEQ scores into Chronotypes
@@ -32,6 +25,13 @@ if 'Chronotype' not in df.columns:
 
 # Now calculate chronotype counts safely
 chronotype_counts = df['Chronotype'].value_counts()
+
+# --- Calculate summary metrics for Objective 3 ---
+mean_pref_start = df['Start_time_code'].mean()
+mean_sleep_quality = df['psqi_2_groups'].mean()
+chronotype_counts = df['Chronotype'].value_counts() if 'Chronotype' in df.columns else df['MEQ'].apply(categorize_meq).value_counts()
+earliest_start = df['Start_time_code'].min()
+latest_start = df['Start_time_code'].max()
 
 
 # Set the title for the Streamlit app
