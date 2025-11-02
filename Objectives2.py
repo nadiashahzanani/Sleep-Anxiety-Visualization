@@ -90,7 +90,7 @@ if continuous_cols:
     st.plotly_chart(fig, use_container_width=True)
 
     # Interpretation box
-    st.markdoen("Interpretation")
+    st.markdown("Interpretation")
     st.markdown("""
     1. Darker colors indicate stronger correlations (positive or negative) between variables.
     2. Variables that move together, like poorer sleep and higher trait anxiety, are easily identified.
