@@ -14,8 +14,6 @@ st.title("Objectives 2 - Explore the relationship sleep quality, anxiety levels 
 url = "https://raw.githubusercontent.com/nadiashahzanani/Sleep-Anxiety-Visualization/refs/heads/main/Time_to_think_Norburyy.csv"
 df = pd.read_csv(url)
 
-# Set the title for the Streamlit app
-st.title("Sleeps and Anxiety Overview")
 
 # --- Check column names ---
 st.write("Columns in dataset:", df.columns.tolist())
