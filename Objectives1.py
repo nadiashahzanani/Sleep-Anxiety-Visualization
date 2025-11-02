@@ -15,13 +15,44 @@ url = "https://raw.githubusercontent.com/nadiashahzanani/Sleep-Anxiety-Visualiza
 df = pd.read_csv(url)
 
 # Set the title for the Streamlit app
-st.title("Arts Faculty Student Data")
+st.title("Student Sleep and Anxiety Overview")
+
+# Example calculations for metrics
+avg_sleep_quality = df['sleep_score'].mean()
+avg_trait_anxiety = df['trait_anxiety'].mean()
+poor_sleep_pct = (df['sleep_score'] > 5).mean() * 100  # % of students with PSQI >5
+high_anxiety_pct = (df['trait_anxiety'] > 40).mean() * 100  # % with high anxiety (example threshold)
+
+# Create 4 columns for metrics
 col1, col2, col3, col4 = st.columns(4)
 
-col1.metric(label="PLO 2", value=f"3.3", help="PLO 2: Cognitive Skill", border=True)
-col2.metric(label="PLO 3", value=f"3.5", help="PLO 3: Digital Skill", border=True)
-col3.metric(label="PLO 4", value=f"4.0", help="PLO 4: Interpersonal Skill", border=True)
-col4.metric(label="PLO 5", value=f"4.3", help="PLO 5: Communication Skill", border=True)
+col1.metric(
+    label="Avg Sleep Quality", 
+    value=f"{avg_sleep_quality:.2f}", 
+    help="Average PSQI score across all students", 
+    delta=None
+)
+
+col2.metric(
+    label="Avg Trait Anxiety", 
+    value=f"{avg_trait_anxiety:.2f}", 
+    help="Average trait anxiety score across all students", 
+    delta=None
+)
+
+col3.metric(
+    label="% Poor Sleep", 
+    value=f"{poor_sleep_pct:.1f}%", 
+    help="Percentage of students reporting poor sleep (PSQI >5)", 
+    delta=None
+)
+
+col4.metric(
+    label="% High Anxiety", 
+    value=f"{high_anxiety_pct:.1f}%", 
+    help="Percentage of students with high trait anxiety", 
+    delta=None
+)
 
 # Calculate mean and median
 mean_psqi = df['psqi_2_groups'].mean()
