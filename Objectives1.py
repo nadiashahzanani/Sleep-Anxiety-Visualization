@@ -77,32 +77,27 @@ about half reported fairly or very bad sleep.
 """)
 
 # --- 2. Sleep Quality Distribution (Histogram) ---
-st.subheader("2. Basic Sleep Quality Distribution")
+st.title("2. Trait Anxiety by Year of Study")
 
-fig_sleep = px.histogram(
+# Create Plotly boxplot
+fig = px.box(
     df,
-    x='psqi_2_groups',
-    color='psqi_2_groups',
-    nbins=10,
-    color_discrete_sequence=px.colors.qualitative.Set2,
-    title="Distribution of Sleep Quality (PSQI)"
+    x='Year_of_Study',
+    y='Trait_Anxiety',
+    points='all',  # Show all points
+    title='Trait Anxiety by Year of Study',
+    labels={'Year_of_Study': 'Year of Study', 'Trait_Anxiety': 'Trait Anxiety Score'},
+    color='Year_of_Study'  # Optional: color by year for better distinction
 )
 
-fig_sleep.update_layout(
-    xaxis_title="PSQI Score (Higher = Poorer Sleep)",
-    yaxis_title="Number of Students",
-    bargap=0.1,
-    template="simple_white",
-    legend_title_text="PSQI Group"
-)
-fig_sleep.update_traces(opacity=0.8)
+# Display in Streamlit
+st.plotly_chart(fig, use_container_width=True)
 
-st.plotly_chart(fig_sleep, use_container_width=True)
-
-st.markdown("**Interpretation:**")
-st.markdown("""
-- Most students fall into two main sleep quality categories: good sleepers (PSQI = 1) and poor sleepers (PSQI = 2).  
-- The interactive legend allows exploring each group's contribution to the overall pattern.
+# --- Interpretation ---
+st.markdown("Interpretation")
+st.write("""
+1. This boxplot shows how students’ anxiety levels differ across their years of study.  
+2. Overall, first-year students tend to have slightly higher and more varied anxiety scores, suggesting they may feel more stress as they adjust to university life.
 """)
 
 # --- 3. Sleep Quality by Year of Study (Box Plot) ---
