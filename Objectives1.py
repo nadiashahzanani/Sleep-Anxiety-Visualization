@@ -70,7 +70,7 @@ fig.update_layout(
 st.plotly_chart(fig, use_container_width=True)
 
 # --- Simple interpretation (Streamlit text output) ---
-st.markdown("### Interpretation")
+st.markdown("Interpretation")
 st.write("""
 This plot shows how students’ sleep quality scores are spread out. 
 Most students appear to have poorer sleep, with many scores clustering toward the higher (worse) end about half reported fairly or very bad sleep.
@@ -95,7 +95,7 @@ fig = px.box(
 st.plotly_chart(fig, use_container_width=True)
 
 # --- Interpretation ---
-st.subheader("Interpretation")
+st.markdown("Interpretation")
 st.write("""
 1. This boxplot shows how students’ anxiety levels differ across their years of study.  
 2. Overall, first-year students tend to have slightly higher and more varied anxiety scores, suggesting they may feel more stress as they adjust to university life.
