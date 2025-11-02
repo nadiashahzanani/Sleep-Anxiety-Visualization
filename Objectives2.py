@@ -5,6 +5,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from scipy import stats
 import plotly.express as px
+import statsmodels.api as sm
+
 
 st.title("1. Explore the relationship sleep quality, anxiety levels and daytime dozing")
 
