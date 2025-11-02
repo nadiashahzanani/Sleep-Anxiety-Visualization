@@ -8,20 +8,31 @@ import plotly.express as px
 import statsmodels.api as sm
 
 
-st.title("1. Explore the relationship sleep quality, anxiety levels and daytime dozing")
+st.title("Objectives 2 - Explore the relationship sleep quality, anxiety levels and daytime dozing")
 
 # Load dataset
 url = "https://raw.githubusercontent.com/nadiashahzanani/Sleep-Anxiety-Visualization/refs/heads/main/Time_to_think_Norburyy.csv"
 df = pd.read_csv(url)
 
 # Set the title for the Streamlit app
-st.title("Arts Faculty Student Data")
-col1, col2, col3, col4 = st.columns(4)
+st.title("Sleeps and Anxiety Overview")
 
-col1.metric(label="PLO 2", value=f"3.3", help="PLO 2: Cognitive Skill", border=True)
-col2.metric(label="PLO 3", value=f"3.5", help="PLO 3: Digital Skill", border=True)
-col3.metric(label="PLO 4", value=f"4.0", help="PLO 4: Interpersonal Skill", border=True)
-col4.metric(label="PLO 5", value=f"4.3", help="PLO 5: Communication Skill", border=True)
+# --- Calculate key metrics ---
+mean_sleep = df['sleep_score'].mean()
+mean_anxiety = df['trait_anxiety'].mean()
+corr, p_val = stats.pearsonr(df['sleep_score'].dropna(), df['trait_anxiety'].dropna())
+
+# Optional: highest sleep score and highest anxiety for context
+max_sleep = df['sleep_score'].max()
+max_anxiety = df['trait_anxiety'].max()
+
+# --- Display metrics ---
+col1, col2, col3, col4 = st.columns(4)
+col1.metric(label="Average Sleep Score", value=f"{mean_sleep:.2f}", help="Higher scores = poorer sleep", delta=f"Max: {max_sleep}")
+col2.metric(label="Average Anxiety Score", value=f"{mean_anxiety:.2f}", help="Trait anxiety measured via STAI", delta=f"Max: {max_anxiety}")
+col3.metric(label="Sleep-Anxiety Correlation", value=f"{corr:.2f}", help="Positive = poor sleep linked to higher anxiety", delta=f"p-value: {p_val:.3g}")
+col4.metric(label="Sample Size", value=f"{len(df)}", help="Number of students included")
+
 
 # ------------------------------------------------------------
 # Step 1: Create Sleep Category (Good vs Poor)
