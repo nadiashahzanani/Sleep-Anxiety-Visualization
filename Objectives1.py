@@ -4,7 +4,7 @@ import pandas as pd
 import plotly.express as px
 
 # --- Page title ---
-st.subheader("1. Gender Representation by Year Level")
+st.subheader("1. Sleep and Anxiety Levels Across Different Groups")
 
 # --- Load dataset ---
 url = "https://raw.githubusercontent.com/nadiashahzanani/Sleep-Anxiety-Visualization/refs/heads/main/Time_to_think_Norburyy.csv"
