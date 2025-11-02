@@ -8,14 +8,14 @@ import plotly.express as px
 
 
 # --- Page title ---
-st.subheader("1. Gender Representation by Year Level")
+st.title("Objectives 1. Distribution and Group Differences In Sleep Quality and Anxiety")
 
 # --- Load dataset ---
 url = "https://raw.githubusercontent.com/nadiashahzanani/Sleep-Anxiety-Visualization/refs/heads/main/Time_to_think_Norburyy.csv"
 df = pd.read_csv(url)
 
 # Set the title for the Streamlit app
-st.title("Student Sleep and Anxiety Overview")
+st.subheader("Student Sleep and Anxiety Overview")
 
 # --- Example calculations for metrics ---
 avg_sleep_quality = df['psqi_2_groups'].mean()           # was 'sleep_score'
@@ -50,6 +50,7 @@ col4.metric(
     help="Percentage of students with high trait anxiety"
 )
 
+st.title("1.1. Histogram of Sleep Quality Scores")
 
 # Calculate mean and median
 mean_psqi = df['psqi_2_groups'].mean()
@@ -96,7 +97,7 @@ fig.add_annotation(
 
 # Layout updates
 fig.update_layout(
-    title_text="Distribution of Sleep Quality (PSQI) with Mean and Median",
+    title_text=" - Distribution of Sleep Quality (PSQI) with Mean and Median",
     xaxis_title="PSQI Score (Higher = Poorer Sleep)",
     yaxis_title="Density",
     template="plotly_white",
@@ -108,7 +109,7 @@ fig.update_layout(
 st.plotly_chart(fig, use_container_width=True)
 
 # --- Simple interpretation (Streamlit text output) ---
-st.markdown("Interpretation")
+st.subheader("Interpretation")
 st.write("""
 This plot shows how students’ sleep quality scores are spread out. 
 Most students appear to have poorer sleep, with many scores clustering toward the higher (worse) end — 
@@ -116,7 +117,7 @@ about half reported fairly or very bad sleep.
 """)
 
 # --- 2. Sleep Quality Distribution (Histogram) ---
-st.title("2. Trait Anxiety by Year of Study")
+st.title("1.2. Boxplot of Trait Anxiety by Year of Study")
 
 # Create Plotly boxplot
 fig = px.box(
@@ -124,7 +125,7 @@ fig = px.box(
     x='Year_of_Study',
     y='Trait_Anxiety',
     points='all',  # Show all points
-    title='Trait Anxiety by Year of Study',
+    title=' - Trait Anxiety by Year of Study',
     labels={'Year_of_Study': 'Year of Study', 'Trait_Anxiety': 'Trait Anxiety Score'},
     color='Year_of_Study'  # Optional: color by year for better distinction
 )
@@ -133,14 +134,14 @@ fig = px.box(
 st.plotly_chart(fig, use_container_width=True)
 
 # --- Interpretation ---
-st.markdown("Interpretation")
+st.subheader("Interpretation")
 st.write("""
 1. This boxplot shows how students’ anxiety levels differ across their years of study.  
 2. Overall, first-year students tend to have slightly higher and more varied anxiety scores, suggesting they may feel more stress as they adjust to university life.
 """)
 
 # --- 3. Sleep Quality by Year of Study (Box Plot) ---
-st.subheader("3. Sleep Quality Distribution by Sex")
+st.title("1.3. Grouped Bar Chart of Categorical Sleep Quality by Gender")
 
 # Categorize psqi_2_groups into descriptive categories
 def categorize_psqi(score):
@@ -159,7 +160,7 @@ fig = px.bar(
     x='Sex',
     color='Sleep_Quality_Category_Detailed',
     barmode='group',
-    title='Sleep Quality Category Distribution by Sex',
+    title=' - Sleep Quality Category Distribution by Sex',
     labels={'Sex': 'Sex', 'Sleep_Quality_Category_Detailed': 'Sleep Quality Category'}
     )
 
