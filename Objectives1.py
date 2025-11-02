@@ -102,39 +102,36 @@ st.write("""
 """)
 
 # --- Interactive Box Plot with Legend Control ---
-st.subheader("3. Sleep Quality (PSQI) by Year of Study (Interactive Legend)")
+st.subheader("3. Sleep Quality Distribution by Sex")
 
-fig = px.box(
-    df,
-    x='Year_of_Study',
-    y='psqi_2_groups',
-    color='Sex',
-    title='Sleep Quality (PSQI) by Year of Study',
-    labels={
-        'Year_of_Study': 'Year of Study',
-        'psqi_2_groups': 'PSQI Score (1 = Good, 2 = Poor)',
-        'Sex': 'Gender'
-    },
-    points='all',  # show individual data points
-    color_discrete_sequence=px.colors.qualitative.Set2
-)
+def categorize_psqi(score):
+        if score == 1:
+            return 'Good Sleep'
+        elif score == 2:
+            return 'Poor Sleep'
+        else:
+            return 'Other'  # Handle unexpected values
 
-# --- Improve Layout & Interactivity ---
-fig.update_layout(
-    yaxis_title="PSQI Score (1 = Good, 2 = Poor)",
-    xaxis_title="Year of Study",
-    plot_bgcolor="rgba(0,0,0,0)",
-    paper_bgcolor="rgba(0,0,0,0)",
-    title_font=dict(size=18),
-    legend_title_text="Click to Filter by Gender",  # encourage legend interaction
-)
+    df['Sleep_Quality_Category_Detailed'] = df['psqi_2_groups'].apply(categorize_psqi)
 
-# --- Display interactive chart in Streamlit ---
-st.plotly_chart(fig, use_container_width=True)
+    # Create grouped bar chart
+    fig = px.bar(
+        df,
+        x='Sex',
+        color='Sleep_Quality_Category_Detailed',
+        barmode='group',
+        title='Sleep Quality Category Distribution by Sex',
+        labels={'Sex': 'Sex', 'Sleep_Quality_Category_Detailed': 'Sleep Quality Category'}
+    )
 
-# --- Interpretation ---
-st.markdown("### **Interpretation:**")
-st.markdown("""
-1. This chart shows that students in Year 1 and 2 have a mix of good and poor sleepers, while most Year 3 students tend to sleep better. 
-2. Overall, sleep quality differences across years are small but still noticeable.
-""")
+    fig.update_layout(yaxis_title="Number of Students")
+    
+    # Display in Streamlit
+    st.plotly_chart(fig, use_container_width=True)
+
+    # Add interpretation
+    st.subheader("Interpretation")
+    st.markdown("""
+    1. This grouped bar chart compares how sleep quality levels differ between male and female students.  
+    2. It shows which gender reports better or poorer sleep more often, helping us see if one group tends to struggle more with sleep quality.
+    """)
