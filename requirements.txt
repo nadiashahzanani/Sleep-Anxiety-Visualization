@@ -5,5 +5,3 @@ matplotlib
 seaborn
 scipy
 numpy
-plotly.express
-plotly.figure_factory
