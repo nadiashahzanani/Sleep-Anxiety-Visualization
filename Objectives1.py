@@ -1,137 +1,115 @@
 # --- Import libraries ---
 import streamlit as st
-import plotly.figure_factory as ff
-import plotly.express as px
-import plotly.graph_objects as go
-import numpy as np
 import pandas as pd
+import plotly.express as px
 
 # --- Page title ---
-st.subheader("Objectives 1: Sleep and Anxiety Levels Across Different Groups")
+st.subheader("1. Gender Representation by Year Level")
 
 # --- Load dataset ---
 url = "https://raw.githubusercontent.com/nadiashahzanani/Sleep-Anxiety-Visualization/refs/heads/main/Time_to_think_Norburyy.csv"
 df = pd.read_csv(url)
 
-# Calculate mean and median
-mean_psqi = df['psqi_2_groups'].mean()
-median_psqi = df['psqi_2_groups'].median()
-
-# Create Plotly distplot
-fig = ff.create_distplot(
-    [df['psqi_2_groups'].dropna()],
-    group_labels=['Distribution of Sleep Quality'],
-    show_hist=True,
-    show_rug=False
-)
-
-# Add mean and median lines
-fig.add_shape(
-    type="line",
-    x0=mean_psqi, y0=0,
-    x1=mean_psqi, y1=1,
-    line=dict(color="red", width=2, dash="dash"),
-    xref='x', yref='paper'
-)
-fig.add_annotation(
-    x=mean_psqi, y=1,
-    xref='x', yref='paper',
-    text=f"Mean: {mean_psqi:.2f}",
-    showarrow=False, yshift=10,
-    font=dict(color="red")
-)
-
-fig.add_shape(
-    type="line",
-    x0=median_psqi, y0=0,
-    x1=median_psqi, y1=1,
-    line=dict(color="green", width=2, dash="dash"),
-    xref='x', yref='paper'
-)
-fig.add_annotation(
-    x=median_psqi, y=1,
-    xref='x', yref='paper',
-    text=f"Median: {median_psqi:.2f}",
-    showarrow=False, yshift=-10,
-    font=dict(color="green")
-)
-
-# Layout updates
-fig.update_layout(
-    title_text="1. Distribution of Sleep Quality (PSQI) with Mean and Median",
-    xaxis_title="PSQI Score (Higher = Poorer Sleep)",
-    yaxis_title="Density",
-    template="plotly_white",
-    width=800,
-    height=500
-)
-
-# Display the figure inside Streamlit
-st.plotly_chart(fig, use_container_width=True)
-
-# --- Simple interpretation (Streamlit text output) ---
-st.markdown("Interpretation")
-st.write("""
-This plot shows how students’ sleep quality scores are spread out. 
-Most students appear to have poorer sleep, with many scores clustering toward the higher (worse) end about half reported fairly or very bad sleep.
-""")
-
-# --- Interactive Plotly Boxplot with Legend ---
-st.subheader("2. Trait Anxiety by Year of Study")
-
-# Create Plotly boxplot
-fig = px.box(
+# --- Create interactive Plotly bar chart (interactive legend built-in) ---
+fig = px.bar(
     df,
     x='Year_of_Study',
-    y='Trait_Anxiety',
-    points='all',  # Show all points
-    title='Trait Anxiety by Year of Study',
-    labels={'Year_of_Study': 'Year of Study', 'Trait_Anxiety': 'Trait Anxiety Score'},
-    color='Year_of_Study'  # Optional: color by year for better distinction
+    color='Sex',
+    barmode='group',
+    title='Gender Distribution by Year of Study',
+    labels={'Year_of_Study': 'Year of Study', 'Sex': 'Sex'},
 )
 
-# Display in Streamlit
+# --- Customize layout ---
+fig.update_layout(
+    yaxis_title="Number of Students",
+    xaxis_title="Year of Study",
+    title_x=0.3,
+    legend_title="Click to Hide/Show Sex Group",
+    plot_bgcolor='rgba(0,0,0,0)',
+    hovermode="x unified"
+)
+
+# --- Display chart in Streamlit ---
+st.plotly_chart(fig, use_container_width=True)
+
+# --- Interpretation section ---
+st.subheader("Interpretation:")
+
+st.markdown("""
+1. This chart shows the gender distribution across different years of study.
+2. It reveals that both male and female students are present in every year, with slightly more students in the earlier years.
+""")
+
+
+# --- Interactive Plotly Histogram with Legend ---
+st.subheader("2. Basic Sleep Quality Distribution")
+
+fig = px.histogram(
+    df,
+    x='psqi_2_groups',
+    color='psqi_2_groups',  # adds interactive legend by grouping color
+    nbins=10,
+    color_discrete_sequence=px.colors.qualitative.Set2,
+    title="Distribution of Sleep Quality (PSQI)",
+)
+
+fig.update_layout(
+    xaxis_title="PSQI Score (Higher = Poorer Sleep)",
+    yaxis_title="Number of Students",
+    bargap=0.1,
+    template="simple_white",
+    legend_title_text="PSQI Group",
+)
+
+# --- Enable interactive legend behavior ---
+# (Plotly does this by default — users can click legend items to hide/show)
+fig.update_traces(opacity=0.8)
+
+# --- Display chart in Streamlit ---
 st.plotly_chart(fig, use_container_width=True)
 
 # --- Interpretation ---
-st.markdown("Interpretation")
-st.write("""
-1. This boxplot shows how students’ anxiety levels differ across their years of study.  
-2. Overall, first-year students tend to have slightly higher and more varied anxiety scores, suggesting they may feel more stress as they adjust to university life.
+st.markdown("### *Interpretation:*")
+st.markdown("""
+1. Most students are grouped into two main sleep quality categories which is good sleepers (PSQI = 1) and poor sleepers (PSQI = 2).
+2. The interactive legend allows users to easily explore how each group contributes to the overall sleep pattern.
 """)
 
 # --- Interactive Box Plot with Legend Control ---
-st.subheader("3. Sleep Quality Distribution by Sex")
+st.subheader("3. Sleep Quality (PSQI) by Year of Study (Interactive Legend)")
 
-def categorize_psqi(score):
-        if score == 1:
-            return 'Good Sleep'
-        elif score == 2:
-            return 'Poor Sleep'
-        else:
-            return 'Other'  # Handle unexpected values
+fig = px.box(
+    df,
+    x='Year_of_Study',
+    y='psqi_2_groups',
+    color='Sex',
+    title='Sleep Quality (PSQI) by Year of Study',
+    labels={
+        'Year_of_Study': 'Year of Study',
+        'psqi_2_groups': 'PSQI Score (1 = Good, 2 = Poor)',
+        'Sex': 'Gender'
+    },
+    points='all',  # show individual data points
+    color_discrete_sequence=px.colors.qualitative.Set2
+)
 
-    df['Sleep_Quality_Category_Detailed'] = df['psqi_2_groups'].apply(categorize_psqi)
+# --- Improve Layout & Interactivity ---
+fig.update_layout(
+    yaxis_title="PSQI Score (1 = Good, 2 = Poor)",
+    xaxis_title="Year of Study",
+    plot_bgcolor="rgba(0,0,0,0)",
+    paper_bgcolor="rgba(0,0,0,0)",
+    title_font=dict(size=18),
+    legend_title_text="Click to Filter by Gender",  # encourage legend interaction
+)
 
-    # Create grouped bar chart
-    fig = px.bar(
-        df,
-        x='Sex',
-        color='Sleep_Quality_Category_Detailed',
-        barmode='group',
-        title='Sleep Quality Category Distribution by Sex',
-        labels={'Sex': 'Sex', 'Sleep_Quality_Category_Detailed': 'Sleep Quality Category'}
-    )
+# --- Display interactive chart in Streamlit ---
+st.plotly_chart(fig, use_container_width=True)
 
-    fig.update_layout(yaxis_title="Number of Students")
-    
-    # Display in Streamlit
-    st.plotly_chart(fig, use_container_width=True)
-
-    # Add interpretation
-    st.subheader("Interpretation")
-    st.markdown("""
-    1. This grouped bar chart compares how sleep quality levels differ between male and female students.  
-    2. It shows which gender reports better or poorer sleep more often, helping us see if one group tends to struggle more with sleep quality.
-    """)
-
+# --- Interpretation ---
+st.markdown("### *Interpretation:*")
+st.markdown("""
+1. This chart shows that students in Year 1 and 2 have a mix of good and poor sleepers, while most Year 3 students tend to sleep better. 
+2. Overall, sleep quality differences across years are small but still noticeable.
+""")
