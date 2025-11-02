@@ -108,4 +108,4 @@ st.markdown("""
     and how their average sleep quality compares. 
 2. Years that prefer later starts but report poorer sleep may benefit from adjusted schedules.
 """)
-
+st.plotly_chart(fig, use_container_width=True)
