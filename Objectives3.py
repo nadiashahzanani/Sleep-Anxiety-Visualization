@@ -10,9 +10,6 @@ st.title("Objectives 3 — Start-Time Preferences, Chronotype and Sleep Quality 
 url = "https://raw.githubusercontent.com/nadiashahzanani/Sleep-Anxiety-Visualization/refs/heads/main/Time_to_think_Norburyy.csv"
 df = pd.read_csv(url)
 
-# Set the title for the Streamlit app
-st.subheader("Start Time Preferences, Sleep Quality Overview")
-
 # Ensure 'Chronotype' column exists
 if 'Chronotype' not in df.columns:
     # Categorize MEQ scores into Chronotypes
