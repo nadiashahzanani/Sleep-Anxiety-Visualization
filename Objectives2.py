@@ -63,6 +63,10 @@ st.markdown("""
 # ------------------------------------------------------------
 # Step 2: Daytime Dozing Frequency by Sleep Quality Category
 # ------------------------------------------------------------
+# Select continuous columns for correlation
+continuous_cols = ['psqi_2_groups', 'Trait_Anxiety', 'Avg_Weekly_Sleep_Duration',
+                       'Avg_Sleep_Working_days', 'Avg_sleep_free_days', 'Daytime_Dozing', 'Age', 'MEQ']
+
 # Ensure selected columns exist in the DataFrame
 continuous_cols = [col for col in continuous_cols if col in df.columns]
 
