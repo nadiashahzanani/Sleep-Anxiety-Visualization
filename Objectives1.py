@@ -17,11 +17,11 @@ df = pd.read_csv(url)
 # Set the title for the Streamlit app
 st.title("Student Sleep and Anxiety Overview")
 
-# Example calculations for metrics
-avg_sleep_quality = df['sleep_score'].mean()
-avg_trait_anxiety = df['trait_anxiety'].mean()
-poor_sleep_pct = (df['sleep_score'] > 5).mean() * 100  # % of students with PSQI >5
-high_anxiety_pct = (df['trait_anxiety'] > 40).mean() * 100  # % with high anxiety (example threshold)
+# --- Example calculations for metrics ---
+avg_sleep_quality = df['psqi_2_groups'].mean()           # was 'sleep_score'
+avg_trait_anxiety = df['Trait_Anxiety'].mean()          # was 'trait_anxiety'
+poor_sleep_pct = (df['psqi_2_groups'] > 1).mean() * 100  # PSQI >1 considered poor sleep in your coding
+high_anxiety_pct = (df['Trait_Anxiety'] > 40).mean() * 100  # threshold example
 
 # Create 4 columns for metrics
 col1, col2, col3, col4 = st.columns(4)
@@ -29,30 +29,27 @@ col1, col2, col3, col4 = st.columns(4)
 col1.metric(
     label="Avg Sleep Quality", 
     value=f"{avg_sleep_quality:.2f}", 
-    help="Average PSQI score across all students", 
-    delta=None
+    help="Average PSQI score across all students"
 )
 
 col2.metric(
     label="Avg Trait Anxiety", 
     value=f"{avg_trait_anxiety:.2f}", 
-    help="Average trait anxiety score across all students", 
-    delta=None
+    help="Average trait anxiety score across all students"
 )
 
 col3.metric(
     label="% Poor Sleep", 
     value=f"{poor_sleep_pct:.1f}%", 
-    help="Percentage of students reporting poor sleep (PSQI >5)", 
-    delta=None
+    help="Percentage of students reporting poor sleep (PSQI >1)"
 )
 
 col4.metric(
     label="% High Anxiety", 
     value=f"{high_anxiety_pct:.1f}%", 
-    help="Percentage of students with high trait anxiety", 
-    delta=None
+    help="Percentage of students with high trait anxiety"
 )
+
 
 # Calculate mean and median
 mean_psqi = df['psqi_2_groups'].mean()
