@@ -1,6 +1,7 @@
 # --- Import libraries ---
 import streamlit as st
 import plotly.figure_factory as ff
+import plotly.express as px
 import plotly.graph_objects as go
 import numpy as np
 import pandas as pd
