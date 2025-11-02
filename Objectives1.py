@@ -124,21 +124,21 @@ def categorize_psqi(score):
 df['Sleep_Quality_Category_Detailed'] = df['psqi_2_groups'].apply(categorize_psqi)
 
 # Create grouped bar chart
-    fig = px.bar(
-        df,
-        x='Sex',
-        color='Sleep_Quality_Category_Detailed',
-        barmode='group',
-        title='Sleep Quality Category Distribution by Sex',
-        labels={'Sex': 'Sex', 'Sleep_Quality_Category_Detailed': 'Sleep Quality Category'}
+fig = px.bar(
+    df,
+    x='Sex',
+    color='Sleep_Quality_Category_Detailed',
+    barmode='group',
+    title='Sleep Quality Category Distribution by Sex',
+    labels={'Sex': 'Sex', 'Sleep_Quality_Category_Detailed': 'Sleep Quality Category'}
     )
 
-    fig.update_layout(yaxis_title="Number of Students")
+fig.update_layout(yaxis_title="Number of Students")
     
-    # Display in Streamlit
+# Display in Streamlit
     st.plotly_chart(fig, use_container_width=True)
 
-    # Add interpretation
+# Add interpretation
     st.subheader("Interpretation")
     st.markdown("""
     1. This grouped bar chart compares how sleep quality levels differ between male and female students.  
