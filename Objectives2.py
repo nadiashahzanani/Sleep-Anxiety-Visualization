@@ -21,7 +21,7 @@ if 'Chronotype' not in df.columns:
     # Example thresholds for MEQ scores
     def categorize_meq(score):
         if score >= 60:
-            return 'Morning Type
+            return 'Morning Type'
         elif score >= 40:
             return 'Intermediate Type'
         else:
