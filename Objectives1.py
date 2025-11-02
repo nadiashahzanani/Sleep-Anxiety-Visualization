@@ -13,6 +13,9 @@ st.subheader("Objectives 1: Sleep and Anxiety Levels Across Different Groups")
 url = "https://raw.githubusercontent.com/nadiashahzanani/Sleep-Anxiety-Visualization/refs/heads/main/Time_to_think_Norburyy.csv"
 df = pd.read_csv(url)
 
+# Streamlit header
+st.subheader("1. Distribution of Sleep Quality (PSQI)")
+
 # Calculate mean and median
 mean_psqi = df['psqi_2_groups'].mean()
 median_psqi = df['psqi_2_groups'].median()
@@ -27,7 +30,6 @@ fig = ff.create_distplot(
 
 # Add mean and median lines
 fig.add_shape(
-    title_text ="1. Distribution of Sleep Quality (PSQI) with Mean and Median",
     type="line",
     x0=mean_psqi, y0=0,
     x1=mean_psqi, y1=1,
@@ -59,6 +61,7 @@ fig.add_annotation(
 
 # Layout updates
 fig.update_layout(
+    title_text="Distribution of Sleep Quality (PSQI) with Mean and Median",
     xaxis_title="PSQI Score (Higher = Poorer Sleep)",
     yaxis_title="Density",
     template="plotly_white",
