@@ -84,7 +84,7 @@ if continuous_cols:
     fig.update_layout(xaxis_showgrid=False,
                     yaxis_showgrid=False,
                     xaxis_nticks=len(continuous_cols),
-                      axis_nticks=len(continuous_cols))
+                    yaxis_nticks=len(continuous_cols))
 
     # Display the heatmap in Streamlit
     st.plotly_chart(fig, use_container_width=True)
