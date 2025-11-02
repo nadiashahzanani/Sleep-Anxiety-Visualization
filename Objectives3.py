@@ -48,7 +48,7 @@ col3.metric(label="Earliest Preferred Start", value=f"{earliest_start:.2f} h",
 col4.metric(label="Latest Preferred Start", value=f"{latest_start:.2f} h",
             help="Latest hour preferred by any student")
 
-st.subheader("3.1. Distribution of Prefereed Class Start Time Across Chronotypes")
+st.title("3.1. Distribution of Prefereed Class Start Time Across Chronotypes")
 
 # Create interactive violin plot with Plotly
 fig = px.violin(
@@ -79,7 +79,7 @@ fig = px.density_heatmap(
     df,
     x='Start_time_code',
     y='psqi_2_groups',
-    title='Preferred Start Time vs Sleep Quality',
+    title=' - Preferred Start Time vs Sleep Quality',
     labels={
         'Start_time_code': 'Preferred Start Time Code',
         'psqi_2_groups': 'PSQI (Sleep Quality)'
@@ -97,7 +97,7 @@ st.markdown("""
 2. Darker areas toward the top-right indicate many poor sleepers prefer later class times, suggesting that starting classes later might help improve their sleep.
 """)
 
-st.title("3.3. Average gap between preferred and actual start times by year (with sleep quality)")
+st.title("3.3. Average Gap Between Preferred and Actual Start Times by Year (With Sleep Quality)")
     
 # --- Calculate mean preferred start time and mean sleep quality by Year of Study ---
 mean_start_time_quality = df.groupby('Year_of_Study').agg(
@@ -110,7 +110,7 @@ fig = px.bar(
     mean_start_time_quality,
     x='Year_of_Study',
     y='Mean_Start_Time_Code',
-    title='Mean Preferred Start Time by Year of Study',
+    title=' - Mean Preferred Start Time by Year of Study',
     labels={'Year_of_Study': 'Year of Study', 'Mean_Start_Time_Code': 'Mean Preferred Start Time Code'},
     text='Mean_Start_Time_Code',  # optional: show bar values
     color='Mean_Start_Time_Code',  # optional: color by height
