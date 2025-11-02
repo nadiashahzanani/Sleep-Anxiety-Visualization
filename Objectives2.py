@@ -57,7 +57,7 @@ r_squared = model.rsquared
 p_value = model.pvalues[1]  # p-value for 'psqi_2_groups'
 
 # --- Create Plotly scatter plot with regression line ---
-st.subheader("2.1. Scatter Plot of Sleep Quality vs Trait Anxiety with Regression Line")
+st.title("2.1. Scatter Plot of Sleep Quality vs Trait Anxiety with Regression Line")
 fig = px.scatter(
     df,
     x='psqi_2_groups',
@@ -80,7 +80,7 @@ st.markdown("""
     """)
 
 
-st.subheader("2.2. Correlation matrix heatmap (continuous measures)")
+st.title("2.2. Correlation matrix heatmap (continuous measures)")
 
 # Select continuous columns for correlation
 continuous_cols = ['psqi_2_groups', 'Trait_Anxiety', 'Avg_Weekly_Sleep_Duration',
@@ -118,7 +118,7 @@ if continuous_cols:
 
 
 # --- Create the interactive violin plot ---
-st.subheader("2.3. Chronotype (rMEQ Score) by Sleep Quality Category (Interactive)")
+st.title("2.3. Chronotype (rMEQ Score) by Sleep Quality Category (Interactive)")
 
 # Ensure 'Chronotype' column exists
 if 'Chronotype' not in df.columns:
