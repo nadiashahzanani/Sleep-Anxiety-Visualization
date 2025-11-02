@@ -103,42 +103,36 @@ if continuous_cols:
 # --- Create the interactive violin plot ---
 st.subheader("1. Chronotype (rMEQ Score) by Sleep Quality Category (Interactive)")
 
-fig = px.violin(
+# Ensure 'Chronotype' column exists
+if 'Chronotype' not in df.columns:
+    # Categorize MEQ scores into Chronotypes (adjust thresholds as needed)
+    def categorize_meq(score):
+        if score >= 60:
+            return 'Morning Type'
+        elif score >= 40:
+            return 'Intermediate Type'
+        else:
+            return 'Evening Type'
+    df['Chronotype'] = df['MEQ'].apply(categorize_meq)
+
+# Create Plotly scatter plot with facet by Chronotype
+fig = px.scatter(
     df,
-    x='sleep_category',
-    y='MEQ',
-    color='sleep_category',
-    box=True,  # adds boxplot inside the violin
-    points='all',  # show individual points
-    title='Chronotype (rMEQ Score) by Sleep Quality Category',
-    labels={
-        'sleep_category': 'Sleep Category',
-        'MEQ': 'rMEQ Score (Higher = Morning Type)'
-    },
-    color_discrete_sequence=px.colors.qualitative.Set2
+    x='psqi_2_groups',
+    y='Trait_Anxiety',
+    facet_col='Chronotype',
+    trendline="ols",  # Add regression line
+    title='Sleep Quality vs Trait Anxiety by Chronotype',
+    labels={'psqi_2_groups': 'PSQI (Sleep Quality)', 'Trait_Anxiety': 'Trait Anxiety'}
 )
 
-# --- Improve layout and interaction ---
-fig.update_layout(
-    showlegend=False,  # no need for legend since color = x
-    plot_bgcolor='rgba(0,0,0,0)',
-    paper_bgcolor='rgba(0,0,0,0)',
-    title_font=dict(size=18),
-    xaxis_title='Sleep Quality Category',
-    yaxis_title='rMEQ Score (Higher = Morning Type)',
-)
-
-# --- Add usage tip ---
-st.markdown("💡 **Tip:** Hover over the violins or data points to see exact rMEQ scores interactively!")
-
-# --- Display the Plotly chart in Streamlit ---
+# Display Plotly figure in Streamlit
 st.plotly_chart(fig, use_container_width=True)
 
-# --- Interpretation ---
-st.markdown("**Interpretation:**")
+# Interpretation section
+st.subheader("Interpretation")
 st.markdown("""
-1. This plot shows how being a *morning* or *evening* type (rMEQ score) relates to sleep quality.  
-2. Among students with **good sleep**, most have mid-range rMEQ scores — meaning they’re neither extreme morning nor evening types.  
-3. Some students with **poor sleep** lean toward eveningness (lower rMEQ scores).  
-4. Overall, **good sleepers** include a mix of chronotypes, but slightly more lean toward morning types.
+1. This scatter plot shows how sleep quality and trait anxiety relate for each chronotype: Morning, Intermediate, and Evening types.  
+2. If the slopes of the regression lines differ, it suggests that chronotype affects how strongly sleep quality links to anxiety.  
+If the slopes are similar, the relationship is consistent across all chronotypes.
 """)
