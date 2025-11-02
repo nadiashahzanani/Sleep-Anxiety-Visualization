@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import ploty.express as px
 
 st.title("Objective 3 — Preferred Start Time by Chronotype")
 
