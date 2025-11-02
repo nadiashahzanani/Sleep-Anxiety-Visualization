@@ -11,9 +11,6 @@ st.subheader("Objectives 1: Sleep and Anxiety Levels Across Different Groups")
 url = "https://raw.githubusercontent.com/nadiashahzanani/Sleep-Anxiety-Visualization/refs/heads/main/Time_to_think_Norburyy.csv"
 df = pd.read_csv(url)
 
-# Streamlit header
-st.subheader("1. Distribution of Sleep Quality (PSQI)")
-
 # Calculate mean and median
 mean_psqi = df['psqi_2_groups'].mean()
 median_psqi = df['psqi_2_groups'].median()
